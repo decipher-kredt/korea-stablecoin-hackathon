@@ -215,7 +215,7 @@ const PaymentToReceipt: React.FC = () => {
               <div className="section-header">
                 <Wallet className="header-icon" />
                 <h2>스테이블코인 결제</h2>
-                <p>가맹점에 USDT로 결제하세요</p>
+                <p>가맹점에 KRW로 결제하세요</p>
               </div>
 
               <form onSubmit={handlePayment} className="payment-form">
@@ -238,7 +238,7 @@ const PaymentToReceipt: React.FC = () => {
                 <div className="form-group">
                   <label>
                     <DollarSign size={18} />
-                    결제 금액 (USDT)
+                    결제 금액 (KRW)
                   </label>
                   <input
                     type="number"
@@ -246,8 +246,8 @@ const PaymentToReceipt: React.FC = () => {
                     value={formData.amount}
                     onChange={handleInputChange}
                     required
-                    step="0.01"
-                    placeholder="100.00"
+                    step="1"
+                    placeholder="10000"
                     className="form-input"
                   />
                 </div>
@@ -389,7 +389,7 @@ const PaymentToReceipt: React.FC = () => {
 
                   <div className="receipt-row highlight">
                     <span className="label">결제 금액</span>
-                    <span className="value amount">{receipt.amount} USDT</span>
+                    <span className="value amount">{receipt.amount} KRW</span>
                   </div>
 
                   <div className="receipt-row">
