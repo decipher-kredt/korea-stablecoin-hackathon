@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ethers, solidityPackedKeccak256, parseEther, getBytes } from 'ethers';
+import { solidityPackedKeccak256, parseEther, getBytes } from 'ethers';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Send, Receipt, Store, Phone, Hash, CheckCircle, 
-  Loader2, ArrowRight, Wallet, CreditCard, FileText,
+  Send, Receipt, Store, Hash, CheckCircle, 
+  Loader2, Wallet, CreditCard, FileText,
   DollarSign, Shield, Smartphone
 } from 'lucide-react';
 import { useWeb3 } from '../hooks/useWeb3';
