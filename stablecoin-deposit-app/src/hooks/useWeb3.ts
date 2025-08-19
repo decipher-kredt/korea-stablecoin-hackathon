@@ -162,10 +162,49 @@ export const useWeb3 = () => {
     }
   }, [web3State.contract]);
 
+  const mintStablecoin = async (amount: string, recipient: string): Promise<{ success: boolean; txHash?: string }> => {
+    if (!web3State.contract || !web3State.signer) return { success: false };
+
+    try {
+      const amountWei = ethers.parseEther(amount);
+      // This would call a mint function on the contract (if bank role)
+      // For demo purposes, we'll simulate this
+      const tx = await web3State.contract.mint(recipient, amountWei);
+      const receipt = await tx.wait();
+
+      return { success: true, txHash: receipt.hash };
+    } catch (error) {
+      console.error('스테이블코인 발행 오류:', error);
+      return { success: false };
+    }
+  };
+
+  const transferWithInterest = async (recipient: string, principal: string, interest: string): Promise<{ success: boolean; txHash?: string }> => {
+    if (!web3State.contract || !web3State.signer) return { success: false };
+
+    try {
+      const principalWei = ethers.parseEther(principal);
+      const interestWei = ethers.parseEther(interest);
+      const totalWei = principalWei + interestWei;
+      
+      // This would call a transfer function on the contract
+      // For demo purposes, we'll simulate this
+      const tx = await web3State.contract.transfer(recipient, totalWei);
+      const receipt = await tx.wait();
+
+      return { success: true, txHash: receipt.hash };
+    } catch (error) {
+      console.error('송금 오류:', error);
+      return { success: false };
+    }
+  };
+
   return {
     ...web3State,
     connectWallet,
     deposit,
     withdraw,
+    mintStablecoin,
+    transferWithInterest,
   };
 };
