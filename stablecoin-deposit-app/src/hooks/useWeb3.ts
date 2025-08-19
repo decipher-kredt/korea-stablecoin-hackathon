@@ -103,40 +103,40 @@ export const useWeb3 = () => {
     }
   };
 
-  const deposit = async (amount: string): Promise<boolean> => {
-    if (!web3State.contract || !web3State.signer) return false;
+  const deposit = async (amount: string): Promise<{ success: boolean; txHash?: string }> => {
+    if (!web3State.contract || !web3State.signer) return { success: false };
 
     try {
       const amountWei = ethers.parseEther(amount);
       const tx = await web3State.contract.deposit(amountWei);
-      await tx.wait();
+      const receipt = await tx.wait();
 
       if (web3State.account) {
         await updateBalances(web3State.account, web3State.contract);
       }
 
-      return true;
+      return { success: true, txHash: receipt.hash };
     } catch (error) {
       console.error('입금 오류:', error);
-      return false;
+      return { success: false };
     }
   };
 
-  const withdraw = async (): Promise<boolean> => {
-    if (!web3State.contract) return false;
+  const withdraw = async (): Promise<{ success: boolean; txHash?: string }> => {
+    if (!web3State.contract) return { success: false };
 
     try {
       const tx = await web3State.contract.withdraw();
-      await tx.wait();
+      const receipt = await tx.wait();
 
       if (web3State.account) {
         await updateBalances(web3State.account, web3State.contract);
       }
 
-      return true;
+      return { success: true, txHash: receipt.hash };
     } catch (error) {
       console.error('출금 오류:', error);
-      return false;
+      return { success: false };
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Wallet, ArrowDownCircle, ArrowUpCircle, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useToast } from '../contexts/ToastContext';
 
 interface DepositWithdrawProps {
   account: string | null;
@@ -8,8 +9,8 @@ interface DepositWithdrawProps {
   interest: string;
   isConnected: boolean;
   onConnect: () => void;
-  onDeposit: (amount: string) => Promise<boolean>;
-  onWithdraw: () => Promise<boolean>;
+  onDeposit: (amount: string) => Promise<{ success: boolean; txHash?: string }>;
+  onWithdraw: () => Promise<{ success: boolean; txHash?: string }>;
 }
 
 const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
@@ -24,31 +25,52 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
+  const { showToast } = useToast();
 
   const handleDeposit = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      alert('유효한 금액을 입력해주세요');
+      showToast('유효한 금액을 입력해주세요', 'error');
       return;
     }
 
     setIsLoading(true);
-    const success = await onDeposit(amount);
-    if (success) {
+    const result = await onDeposit(amount);
+    if (result.success) {
       setAmount('');
-      alert('입금이 성공적으로 완료되었습니다!');
+      const explorerUrl = result.txHash 
+        ? `https://kairos.kaiascan.io/tx/${result.txHash}`
+        : undefined;
+      
+      showToast('입금 완료', {
+        type: 'success',
+        action: explorerUrl ? {
+          label: '확인',
+          href: explorerUrl
+        } : undefined
+      });
     } else {
-      alert('입금에 실패했습니다. 다시 시도해주세요.');
+      showToast('입금에 실패했습니다. 다시 시도해주세요.', 'error');
     }
     setIsLoading(false);
   };
 
   const handleWithdraw = async () => {
     setIsLoading(true);
-    const success = await onWithdraw();
-    if (success) {
-      alert('출금이 성공적으로 완료되었습니다!');
+    const result = await onWithdraw();
+    if (result.success) {
+      const explorerUrl = result.txHash 
+        ? `https://kairos.kaiascan.io/tx/${result.txHash}`
+        : undefined;
+      
+      showToast('출금 완료', {
+        type: 'success',
+        action: explorerUrl ? {
+          label: '확인',
+          href: explorerUrl
+        } : undefined
+      });
     } else {
-      alert('출금에 실패했습니다. 다시 시도해주세요.');
+      showToast('출금에 실패했습니다. 다시 시도해주세요.', 'error');
     }
     setIsLoading(false);
   };
