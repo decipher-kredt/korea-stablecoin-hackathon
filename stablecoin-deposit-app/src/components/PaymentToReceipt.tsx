@@ -26,7 +26,7 @@ interface ReceiptData extends PaymentData {
 type FlowStep = 'payment' | 'processing' | 'receipt' | 'complete';
 
 const PaymentToReceipt: React.FC = () => {
-  const { account, signer } = useWeb3();
+  const { account, signer, connectWallet } = useWeb3();
   const { showToast } = useToast();
   const [currentStep, setCurrentStep] = useState<FlowStep>('payment');
   const [formData, setFormData] = useState<PaymentData>({
@@ -44,10 +44,16 @@ const PaymentToReceipt: React.FC = () => {
   };
 
   const simulatePayment = async (): Promise<string> => {
-    // Simulate blockchain transaction
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    const mockTxHash = `0x${Math.random().toString(16).substr(2, 64)}`;
-    return mockTxHash;
+    if (!signer) throw new Error('No signer available');
+    
+    // Send to 0x000...000 address
+    const tx = await signer.sendTransaction({
+      to: '0x0000000000000000000000000000000000000000',
+      value: parseEther(formData.amount)
+    });
+    
+    await tx.wait();
+    return tx.hash;
   };
 
   const generateReceiptId = () => {
@@ -262,16 +268,29 @@ const PaymentToReceipt: React.FC = () => {
                   />
                 </div>
 
-                <motion.button
-                  type="submit"
-                  disabled={!account}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="submit-button primary"
-                >
-                  <Send size={20} />
-                  결제하기
-                </motion.button>
+                {!account ? (
+                  <motion.button
+                    type="button"
+                    onClick={connectWallet}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="submit-button primary"
+                  >
+                    <Wallet size={20} />
+                    지갑 연결하기
+                  </motion.button>
+                ) : (
+                  <motion.button
+                    type="submit"
+                    disabled={!formData.merchantName || !formData.amount || !formData.phoneNumber}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="submit-button primary"
+                  >
+                    <Send size={20} />
+                    결제하기
+                  </motion.button>
+                )}
               </form>
             </motion.div>
           )}

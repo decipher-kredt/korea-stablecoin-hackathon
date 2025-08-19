@@ -12,8 +12,7 @@ import { Wallet, Receipt, Home, User, Building2 } from 'lucide-react';
 const HomePage = () => {
   return (
     <div className="home-page">
-      <h1>Kaia 블록체인 데모</h1>
-      <p>스테이블코인 기반 금융 서비스 데모</p>
+      <h1>Kaia Stablecoin 해커톤 데모</h1>
       
       <div className="demo-cards">
         <Link to="/deposit" className="demo-card">
