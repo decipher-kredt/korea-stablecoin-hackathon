@@ -89,7 +89,7 @@ body::before {
 /* Wallet Section */
 .wallet-section {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 
