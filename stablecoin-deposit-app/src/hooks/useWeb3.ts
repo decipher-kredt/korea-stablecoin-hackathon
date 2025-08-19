@@ -35,9 +35,42 @@ export const useWeb3 = () => {
       }
 
       const provider = new ethers.BrowserProvider((window as any).ethereum);
+
+      // Kaia Kairos Testnet 네트워크로 전환
+      const chainId = '0x3e9'; // 1001 in hex for Kaia Kairos testnet
+      
+      // 먼저 네트워크 추가를 시도
+      try {
+        await provider.send('wallet_addEthereumChain', [{
+          chainId,
+          chainName: 'Kaia Kairos Testnet',
+          nativeCurrency: {
+            name: 'KAIA',
+            symbol: 'KAIA',
+            decimals: 18
+          },
+          rpcUrls: ['https://public-en-kairos.node.kaia.io'],
+          blockExplorerUrls: ['https://kairos.kaiascan.io']
+        }]);
+      } catch (addError: any) {
+        // 이미 추가된 네트워크인 경우 전환 시도
+        if (addError.code === 4001) {
+          // 사용자가 거부한 경우
+          console.error('사용자가 네트워크 추가를 거부했습니다');
+          return;
+        }
+        // 이미 존재하는 네트워크면 전환 시도
+        try {
+          await provider.send('wallet_switchEthereumChain', [{ chainId }]);
+        } catch (switchError) {
+          console.error('네트워크 전환 실패:', switchError);
+          throw switchError;
+        }
+      }
+
       const accounts = await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      
+
       const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 
       setWeb3State({
@@ -77,11 +110,11 @@ export const useWeb3 = () => {
       const amountWei = ethers.parseEther(amount);
       const tx = await web3State.contract.deposit(amountWei);
       await tx.wait();
-      
+
       if (web3State.account) {
         await updateBalances(web3State.account, web3State.contract);
       }
-      
+
       return true;
     } catch (error) {
       console.error('입금 오류:', error);
@@ -95,11 +128,11 @@ export const useWeb3 = () => {
     try {
       const tx = await web3State.contract.withdraw();
       await tx.wait();
-      
+
       if (web3State.account) {
         await updateBalances(web3State.account, web3State.contract);
       }
-      
+
       return true;
     } catch (error) {
       console.error('출금 오류:', error);
