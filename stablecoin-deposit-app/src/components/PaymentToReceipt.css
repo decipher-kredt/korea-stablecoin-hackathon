@@ -11,10 +11,8 @@
   justify-content: center;
   margin-bottom: 3rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
 }
 
 .progress-step {
@@ -29,21 +27,19 @@
 .step-icon {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: #999;
   transition: all 0.3s ease;
 }
 
 .progress-step.active .step-icon {
-  background: linear-gradient(135deg, #6E56CF 0%, #10B981 100%);
-  border-color: transparent;
+  background: #6E56CF;
+  border-color: #6E56CF;
   color: white;
-  box-shadow: 0 4px 20px rgba(110, 86, 207, 0.4);
   animation: pulse 2s infinite;
 }
 
@@ -60,19 +56,19 @@
 
 .progress-step span {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666;
   font-weight: 500;
 }
 
 .progress-step.active span,
 .progress-step.completed span {
-  color: white;
+  color: #333;
 }
 
 .progress-line {
   flex: 1;
   height: 2px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e0e0e0;
   margin: 0 1rem;
   position: relative;
   overflow: hidden;
@@ -83,7 +79,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #10B981 0%, #6E56CF 100%);
+  background: #6E56CF;
   transition: width 0.6s ease;
 }
 
@@ -99,13 +95,10 @@
 .payment-section {
   width: 100%;
   max-width: 500px;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
+  background: #ffffff;
   padding: 2.5rem;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.1),
-    0 10px 30px rgba(110, 86, 207, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e0e0e0;
 }
 
 .section-header {
@@ -156,7 +149,6 @@
 .form-input {
   padding: 0.875rem 1rem;
   border: 2px solid #e5e5e5;
-  border-radius: 12px;
   font-size: 1rem;
   transition: all 0.3s ease;
   background: white;
@@ -165,7 +157,6 @@
 .form-input:focus {
   outline: none;
   border-color: #6E56CF;
-  box-shadow: 0 0 0 3px rgba(110, 86, 207, 0.1);
 }
 
 .submit-button {
@@ -174,8 +165,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem;
-  border: none;
-  border-radius: 12px;
+  border: 1px solid transparent;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -183,17 +173,20 @@
 }
 
 .submit-button.primary {
-  background: linear-gradient(135deg, #6E56CF 0%, #8B6FDB 100%);
+  background: #6E56CF;
   color: white;
+  border-color: #6E56CF;
 }
 
 .submit-button.primary:hover:not(:disabled) {
-  box-shadow: 0 8px 24px rgba(110, 86, 207, 0.3);
+  background: #5E46BF;
+  border-color: #5E46BF;
 }
 
 .submit-button.success {
-  background: linear-gradient(135deg, #10B981 0%, #0EA572 100%);
+  background: #10B981;
   color: white;
+  border-color: #10B981;
 }
 
 .submit-button.secondary {
@@ -215,21 +208,20 @@
 .processing-icon {
   display: inline-flex;
   padding: 2rem;
-  background: linear-gradient(135deg, #6E56CF 0%, #10B981 100%);
-  border-radius: 50%;
+  background: #6E56CF;
   color: white;
   margin-bottom: 2rem;
-  box-shadow: 0 20px 60px rgba(110, 86, 207, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .processing-section h3 {
   font-size: 1.5rem;
-  color: white;
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
 .processing-section p {
-  color: rgba(255, 255, 255, 0.8);
+  color: #666;
   margin-bottom: 2rem;
 }
 
@@ -238,15 +230,14 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
 }
 
 .tx-hash {
   font-family: monospace;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: #333;
 }
 
 /* Receipt Generation */
@@ -266,20 +257,19 @@
   justify-content: center;
   width: 120px;
   height: 120px;
-  background: linear-gradient(135deg, #6E56CF 0%, #10B981 100%);
-  border-radius: 50%;
+  background: #6E56CF;
   color: white;
-  box-shadow: 0 20px 60px rgba(110, 86, 207, 0.4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .receipt-generation h3 {
   font-size: 1.5rem;
-  color: white;
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
 .receipt-generation p {
-  color: rgba(255, 255, 255, 0.8);
+  color: #666;
 }
 
 /* Complete Section */
@@ -290,11 +280,9 @@
 
 .receipt-card {
   background: white;
-  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.1),
-    0 10px 30px rgba(110, 86, 207, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e0e0e0;
 }
 
 .receipt-header {
@@ -302,8 +290,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, #6E56CF 0%, #8B6FDB 100%);
+  background: #6E56CF;
   color: white;
+  border-bottom: 1px solid #5E46BF;
 }
 
 .receipt-title {
@@ -320,7 +309,6 @@
 .success-icon {
   color: #10B981;
   background: white;
-  border-radius: 50%;
   padding: 2px;
 }
 
@@ -341,11 +329,10 @@
 }
 
 .receipt-row.highlight {
-  background: linear-gradient(90deg, rgba(110, 86, 207, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  background: #f8f7ff;
   margin: 0 -2rem;
   padding-left: 2rem;
   padding-right: 2rem;
-  border-radius: 12px;
   border: none;
 }
 
@@ -380,8 +367,8 @@
   gap: 0.5rem;
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  background: rgba(110, 86, 207, 0.05);
-  border-radius: 8px;
+  background: #f8f7ff;
+  border: 1px solid #e0dcff;
   color: #6E56CF;
   font-size: 0.875rem;
   font-weight: 500;

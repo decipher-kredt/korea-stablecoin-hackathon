@@ -31,15 +31,13 @@ code {
   padding: 16px 20px;
   min-width: 280px;
   max-width: 400px;
-  background: linear-gradient(135deg, #1a1a23 0%, #23232f 100%);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
-              0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: #1a1a23;
+  border: 1px solid #333;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   color: #EDEDED;
   font-size: 14px;
   font-weight: 500;
   pointer-events: auto;
-  backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
 }
@@ -69,22 +67,19 @@ code {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: linear-gradient(135deg, #10B981 0%, #0D9668 100%);
-  border: none;
-  border-radius: 10px;
+  background: #10B981;
+  border: 1px solid #10B981;
   color: white;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .toast-action:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  background: #059669;
+  border-color: #059669;
 }
 
 .toast-action:active {
@@ -96,7 +91,7 @@ code {
 }
 
 .toast-success::before {
-  background: linear-gradient(90deg, transparent, #10B981);
+  background: #10B981;
 }
 
 .toast-success .toast-icon {
@@ -108,7 +103,7 @@ code {
 }
 
 .toast-error::before {
-  background: linear-gradient(90deg, transparent, #EF4444);
+  background: #EF4444;
 }
 
 .toast-error .toast-icon {
@@ -120,7 +115,7 @@ code {
 }
 
 .toast-info::before {
-  background: linear-gradient(90deg, transparent, #6E56CF);
+  background: #6E56CF;
 }
 
 .toast-info .toast-icon {
@@ -158,7 +153,6 @@ code {
   color: #888;
   cursor: pointer;
   padding: 4px;
-  border-radius: 6px;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
