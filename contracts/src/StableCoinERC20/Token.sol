@@ -10,7 +10,11 @@ contract StableCoin is ERC20, Ownable {
         Ownable(initialOwner)
     {}
 
-    function mint(address to, uint256 amount) external onlyOwner {
-        _mint(to, amount);
+    function mint(address account, uint256 value) external onlyOwner {
+        _mint(account, value);
+    }
+
+    function burn(address account, uint256 value) external onlyOwner {
+        _burn(account, value);
     }
 }
