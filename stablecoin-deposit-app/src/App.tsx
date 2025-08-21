@@ -4,10 +4,11 @@ import './App.css';
 import DepositWithdraw from './components/DepositWithdraw';
 import BankDemo from './components/BankDemo';
 import PaymentToReceipt from './components/PaymentToReceipt';
+import Settlement from './components/Settlement';
 import './components/PaymentToReceipt.css';
 import { useWeb3 } from './hooks/useWeb3';
 import { ToastProvider } from './contexts/ToastContext';
-import { Wallet, Receipt, Home, User, Building2 } from 'lucide-react';
+import { Wallet, Receipt, Home, User, Building2, Calculator } from 'lucide-react';
 
 const HomePage = () => {
   return (
@@ -25,6 +26,12 @@ const HomePage = () => {
           <Receipt className="demo-icon" size={48} />
           <h3>현금영수증</h3>
           <p>암호화폐 결제 영수증 발행</p>
+        </Link>
+        
+        <Link to="/settlement" className="demo-card">
+          <Calculator className="demo-icon" size={48} />
+          <h3>쿠팡 셀러 정산</h3>
+          <p>쿠팡 셀러 3곳 스테이블코인 정산</p>
         </Link>
       </div>
     </div>
@@ -112,6 +119,24 @@ const ReceiptPage = () => {
   );
 };
 
+const SettlementPage = () => {
+  return (
+    <div className="App">
+      <header className="app-header">
+        <Link to="/" className="back-link">
+          <Home size={20} />
+          홈으로
+        </Link>
+        <h1>쿠팡 셀러 정산 시스템</h1>
+        <p>쿠팡 셀러 스테이블코인 자동 정산</p>
+      </header>
+      <main className="main-content">
+        <Settlement />
+      </main>
+    </div>
+  );
+};
+
 function App() {
   return (
     <ToastProvider>
@@ -120,6 +145,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/deposit" element={<DepositPage />} />
           <Route path="/receipt" element={<ReceiptPage />} />
+          <Route path="/settlement" element={<SettlementPage />} />
         </Routes>
       </Router>
     </ToastProvider>
