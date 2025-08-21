@@ -36,7 +36,7 @@ contract Vault {
     function deposit(address depositor, uint256 amount) external onlyVaultManager {
         require(amount > 0, "Amount must be greater than 0");
         require(depositor != address(0), "ZERO ADDRESS");
-        require(stablecoin.transferFrom(msg.sender, address(this), amount), "Transfer failed");
+        require(stablecoin.transferFrom(msg.sender, address(this), amount), "TransferFrom failed");
 
         depositors[depositor] += amount;
         depositTimestamp[depositor] = block.timestamp;
@@ -53,7 +53,12 @@ contract Vault {
         if (timeElapsed >= LOCK_PERIOD) {
             return (principal * INTEREST_RATE) / 1000;
         }
-        return (principal * INTEREST_RATE * timeElapsed) / (1000 * LOCK_PERIOD);
+
+        // for POC, We just provide 3.0% interest.
+        return (principal * INTEREST_RATE) / 1000;
+
+        // origin code.
+        // return (principal * INTEREST_RATE * timeElapsed) / (1000 * LOCK_PERIOD);
     }
 
     function withdraw(address depositor) external onlyVaultManager {
@@ -80,5 +85,13 @@ contract Vault {
         interest = calculateInterest(depositor);
         timestamp = depositTimestamp[depositor];
         canWithdraw = (block.timestamp >= depositTimestamp[depositor] + LOCK_PERIOD) || (interest > 0);
+    }
+
+    function borrow() external {
+        // to be continue...
+    }
+
+    function repay() external {
+        // to be continue...
     }
 }
