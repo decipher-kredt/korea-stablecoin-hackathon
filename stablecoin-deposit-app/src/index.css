@@ -31,9 +31,12 @@ code {
   padding: 16px 20px;
   min-width: 280px;
   max-width: 400px;
-  background: #1a1a23;
-  border: 1px solid #333;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(191, 240, 7, 0.3);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: #EDEDED;
   font-size: 14px;
   font-weight: 500;
@@ -67,19 +70,23 @@ code {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: #10B981;
-  border: 1px solid #10B981;
-  color: white;
+  background: rgba(191, 240, 7, 0.2);
+  border: 1px solid rgba(191, 240, 7, 0.4);
+  border-radius: 0.5rem;
+  color: #bff007;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
 .toast-action:hover {
-  background: #059669;
-  border-color: #059669;
+  background: rgba(191, 240, 7, 0.3);
+  border-color: rgba(191, 240, 7, 0.6);
+  box-shadow: 0 0 15px rgba(191, 240, 7, 0.3);
 }
 
 .toast-action:active {
@@ -87,15 +94,17 @@ code {
 }
 
 .toast-success {
-  border-left: 3px solid #10B981;
+  border-left: 3px solid #bff007;
+  box-shadow: 0 0 20px rgba(191, 240, 7, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .toast-success::before {
-  background: #10B981;
+  background: #bff007;
 }
 
 .toast-success .toast-icon {
-  color: #10B981;
+  color: #bff007;
+  filter: drop-shadow(0 0 8px rgba(191, 240, 7, 0.4));
 }
 
 .toast-error {
@@ -111,15 +120,17 @@ code {
 }
 
 .toast-info {
-  border-left: 3px solid #6E56CF;
+  border-left: 3px solid #bff007;
+  box-shadow: 0 0 20px rgba(191, 240, 7, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .toast-info::before {
-  background: #6E56CF;
+  background: #bff007;
 }
 
 .toast-info .toast-icon {
-  color: #6E56CF;
+  color: #bff007;
+  filter: drop-shadow(0 0 8px rgba(191, 240, 7, 0.4));
 }
 
 .toast-icon {

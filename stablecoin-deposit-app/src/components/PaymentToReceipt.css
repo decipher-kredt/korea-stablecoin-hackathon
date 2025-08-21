@@ -11,8 +11,11 @@
   justify-content: center;
   margin-bottom: 3rem;
   padding: 1.5rem;
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(191, 240, 7, 0.2);
+  border-radius: 1rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .progress-step {
@@ -27,26 +30,31 @@
 .step-icon {
   width: 48px;
   height: 48px;
-  background: #ffffff;
-  border: 2px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(191, 240, 7, 0.2);
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
+  color: rgba(191, 240, 7, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
 .progress-step.active .step-icon {
-  background: #6E56CF;
-  border-color: #6E56CF;
-  color: white;
+  background: rgba(191, 240, 7, 0.2);
+  border-color: #bff007;
+  color: #bff007;
+  box-shadow: 0 0 20px rgba(191, 240, 7, 0.4);
   animation: pulse 2s infinite;
 }
 
 .progress-step.completed .step-icon {
-  background: #10B981;
-  border-color: #10B981;
-  color: white;
+  background: rgba(191, 240, 7, 0.3);
+  border-color: #bff007;
+  color: #000;
+  box-shadow: 0 0 15px rgba(191, 240, 7, 0.3);
 }
 
 @keyframes pulse {
@@ -56,22 +64,24 @@
 
 .progress-step span {
   font-size: 0.875rem;
-  color: #666;
+  color: rgba(191, 240, 7, 0.7);
   font-weight: 500;
 }
 
 .progress-step.active span,
 .progress-step.completed span {
-  color: #333;
+  color: #bff007;
+  text-shadow: 0 0 8px rgba(191, 240, 7, 0.3);
 }
 
 .progress-line {
   flex: 1;
   height: 2px;
-  background: #e0e0e0;
+  background: rgba(191, 240, 7, 0.2);
   margin: 0 1rem;
   position: relative;
   overflow: hidden;
+  border-radius: 1px;
 }
 
 .progress-fill {
@@ -79,7 +89,8 @@
   top: 0;
   left: 0;
   height: 100%;
-  background: #6E56CF;
+  background: #bff007;
+  box-shadow: 0 0 10px rgba(191, 240, 7, 0.5);
   transition: width 0.6s ease;
 }
 
@@ -95,10 +106,13 @@
 .payment-section {
   width: 100%;
   max-width: 500px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
   padding: 2.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  border: 1px solid #e0e0e0;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(191, 240, 7, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .section-header {
@@ -109,19 +123,20 @@
 .header-icon {
   width: 48px;
   height: 48px;
-  color: #6E56CF;
+  color: #bff007;
   margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px rgba(191, 240, 7, 0.4));
 }
 
 .section-header h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #EDEDED;
   margin-bottom: 0.5rem;
 }
 
 .section-header p {
-  color: #666;
+  color: rgba(237, 237, 237, 0.7);
   font-size: 1rem;
 }
 
@@ -141,22 +156,27 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #666;
+  color: rgba(191, 240, 7, 0.8);
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 .form-input {
   padding: 0.875rem 1rem;
-  border: 2px solid #e5e5e5;
+  border: 2px solid rgba(191, 240, 7, 0.2);
+  border-radius: 0.75rem;
   font-size: 1rem;
   transition: all 0.3s ease;
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
+  color: #EDEDED;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #6E56CF;
+  border-color: rgba(191, 240, 7, 0.6);
+  box-shadow: 0 0 20px rgba(191, 240, 7, 0.2);
 }
 
 .submit-button {
@@ -173,25 +193,39 @@
 }
 
 .submit-button.primary {
-  background: #6E56CF;
-  color: white;
-  border-color: #6E56CF;
+  background: rgba(191, 240, 7, 0.15);
+  color: #bff007;
+  border: 1px solid rgba(191, 240, 7, 0.4);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 20px rgba(191, 240, 7, 0.2);
 }
 
 .submit-button.primary:hover:not(:disabled) {
-  background: #5E46BF;
-  border-color: #5E46BF;
+  background: rgba(191, 240, 7, 0.25);
+  border-color: rgba(191, 240, 7, 0.6);
+  box-shadow: 0 8px 30px rgba(191, 240, 7, 0.3);
+  transform: translateY(-2px);
 }
 
 .submit-button.success {
-  background: #10B981;
-  color: white;
-  border-color: #10B981;
+  background: rgba(191, 240, 7, 0.2);
+  color: #bff007;
+  border: 1px solid rgba(191, 240, 7, 0.5);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 20px rgba(191, 240, 7, 0.3);
 }
 
 .submit-button.secondary {
-  background: rgba(0, 0, 0, 0.05);
-  color: #666;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(237, 237, 237, 0.7);
+  border: 1px solid rgba(191, 240, 7, 0.2);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .submit-button:disabled {
@@ -208,20 +242,23 @@
 .processing-icon {
   display: inline-flex;
   padding: 2rem;
-  background: #6E56CF;
-  color: white;
+  background: rgba(191, 240, 7, 0.2);
+  color: #bff007;
+  border-radius: 1rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(191, 240, 7, 0.3);
 }
 
 .processing-section h3 {
   font-size: 1.5rem;
-  color: #333;
+  color: #EDEDED;
   margin-bottom: 0.5rem;
 }
 
 .processing-section p {
-  color: #666;
+  color: rgba(237, 237, 237, 0.7);
   margin-bottom: 2rem;
 }
 
@@ -230,14 +267,17 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(191, 240, 7, 0.2);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .tx-hash {
   font-family: monospace;
   font-size: 0.875rem;
-  color: #333;
+  color: #bff007;
 }
 
 /* Receipt Generation */
@@ -257,19 +297,22 @@
   justify-content: center;
   width: 120px;
   height: 120px;
-  background: #6E56CF;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgba(191, 240, 7, 0.2);
+  color: #bff007;
+  border-radius: 1rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 30px rgba(191, 240, 7, 0.4);
 }
 
 .receipt-generation h3 {
   font-size: 1.5rem;
-  color: #333;
+  color: #EDEDED;
   margin-bottom: 0.5rem;
 }
 
 .receipt-generation p {
-  color: #666;
+  color: rgba(237, 237, 237, 0.7);
 }
 
 /* Complete Section */
@@ -279,10 +322,13 @@
 }
 
 .receipt-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  border: 1px solid #e0e0e0;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(191, 240, 7, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .receipt-header {
@@ -290,9 +336,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background: #6E56CF;
-  color: white;
-  border-bottom: 1px solid #5E46BF;
+  background: rgba(191, 240, 7, 0.15);
+  color: #bff007;
+  border-bottom: 1px solid rgba(191, 240, 7, 0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .receipt-title {
@@ -307,9 +355,12 @@
 }
 
 .success-icon {
-  color: #10B981;
-  background: white;
+  color: #bff007;
+  background: rgba(0, 0, 0, 0.3);
   padding: 2px;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .receipt-body {
@@ -329,7 +380,7 @@
 }
 
 .receipt-row.highlight {
-  background: #f8f7ff;
+  background: rgba(191, 240, 7, 0.05);
   margin: 0 -2rem;
   padding-left: 2rem;
   padding-right: 2rem;
@@ -338,13 +389,13 @@
 
 .receipt-row .label {
   font-size: 0.875rem;
-  color: #666;
+  color: rgba(191, 240, 7, 0.7);
   font-weight: 500;
 }
 
 .receipt-row .value {
   font-size: 1rem;
-  color: #1a1a1a;
+  color: #EDEDED;
   font-weight: 600;
 }
 
@@ -358,7 +409,8 @@
 
 .receipt-row .value.amount {
   font-size: 1.25rem;
-  color: #10B981;
+  color: #bff007;
+  text-shadow: 0 0 10px rgba(191, 240, 7, 0.3);
 }
 
 .signature-section {
@@ -367,11 +419,14 @@
   gap: 0.5rem;
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  background: #f8f7ff;
-  border: 1px solid #e0dcff;
-  color: #6E56CF;
+  background: rgba(191, 240, 7, 0.08);
+  border: 1px solid rgba(191, 240, 7, 0.3);
+  border-radius: 0.75rem;
+  color: #bff007;
   font-size: 0.875rem;
   font-weight: 500;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .receipt-actions {
