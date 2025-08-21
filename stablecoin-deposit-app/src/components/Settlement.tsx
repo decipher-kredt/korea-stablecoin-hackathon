@@ -130,15 +130,6 @@ const Settlement = () => {
   return (
     <div className="settlement-container">
       <div className="settlement-content">
-        <div className="settlement-header">
-          <h1 className="settlement-title">
-            쿠팡 셀러 정산 시스템
-          </h1>
-          <p className="settlement-subtitle">
-            쿠팡 플랫폼 내 셀러 3곳에 스테이블코인을 자동으로 정산합니다
-          </p>
-        </div>
-
         <div className="settlement-main">
           <div className="settlement-status">
             <h2 className="status-title">정산 현황</h2>
