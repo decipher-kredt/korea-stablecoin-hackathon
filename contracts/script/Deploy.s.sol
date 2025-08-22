@@ -9,7 +9,7 @@ import {VaultManager} from "../src/VaultManager.sol";
 import {PaymentSystem} from "../src/PaymentSystem.sol";
 import {ECommerce} from "../src/ECommerce.sol";
 
-contract Ex is Script {
+contract Deploy is Script {
     function run() public {
         vm.startBroadcast();
 
