@@ -13,20 +13,21 @@ contract Deploy is Script {
     function run() public {
         vm.startBroadcast();
 
-        StableCoin KREDT = new StableCoin("KREDT", "KREDT", address(this));
+        StableCoin KREDT = new StableCoin("KREDT", "KREDT", msg.sender);
         console.log("KREDT: ", address(KREDT));
 
-        VaultManager vaultManager = new VaultManager(address(KREDT), address(this));
+        VaultManager vaultManager = new VaultManager(address(KREDT), msg.sender);
         KREDT.approve(address(vaultManager), type(uint256).max);
         KREDT.mint(address(vaultManager), 100_000_000 ether);
+        KREDT.transferOwnership(address(vaultManager));
 
         console.log("Vault: ", address(vaultManager.vault()));
         console.log("VaultManager: ", address(vaultManager));
 
-        PaymentSystem payment = new PaymentSystem(address(KREDT), address(this));
+        PaymentSystem payment = new PaymentSystem(address(KREDT), msg.sender);
         console.log("PayamentSystem: ", address(payment));
 
-        ECommerce ecommerce = new ECommerce(address(KREDT), address(this));
+        ECommerce ecommerce = new ECommerce(address(KREDT), msg.sender);
         console.log("ECommerce: ", address(ecommerce));
 
         ecommerce.addSeller("Nike", address(0x2AC0fa1C8CF6f988999B51Ac66d22ff1E0ce7D2a));
