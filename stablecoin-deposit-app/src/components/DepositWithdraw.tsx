@@ -98,22 +98,21 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
         )}
       </div>
 
-      {isConnected && (
-        <div className="main-interface">
-          <div className="balance-display">
-            <div className="balance-card">
-              <span className="balance-label">예치금</span>
-              <span className="balance-amount">{depositedAmount} KRW</span>
-            </div>
-            <div className="balance-card highlight">
-              <span className="balance-label">발생 이자</span>
-              <span className="balance-amount">{interest} KRW</span>
-            </div>
-            <div className="balance-card total">
-              <span className="balance-label">총 금액</span>
-              <span className="balance-amount">{totalAmount} KRW</span>
-            </div>
+      <div className="main-interface">
+        <div className="balance-display">
+          <div className="balance-card">
+            <span className="balance-label">예치금</span>
+            <span className="balance-amount">{isConnected ? depositedAmount : '0'} KRW</span>
           </div>
+          <div className="balance-card highlight">
+            <span className="balance-label">발생 이자</span>
+            <span className="balance-amount">{isConnected ? interest : '0'} KRW</span>
+          </div>
+          <div className="balance-card total">
+            <span className="balance-label">총 금액</span>
+            <span className="balance-amount">{isConnected ? totalAmount : '0'} KRW</span>
+          </div>
+        </div>
 
           <div className="action-tabs">
             <button
@@ -153,12 +152,12 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
 
                 <motion.button
                   className="action-btn deposit-btn"
-                  onClick={handleDeposit}
-                  disabled={isLoading || !amount}
+                  onClick={isConnected ? handleDeposit : onConnect}
+                  disabled={isLoading || (!isConnected ? false : !amount)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {isLoading ? '처리중...' : '스테이블코인 입금'}
+                  {isLoading ? '처리중...' : isConnected ? '스테이블코인 입금' : '지갑 연결 후 입금'}
                 </motion.button>
               </div>
             ) : (
@@ -166,32 +165,31 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
                 <div className="withdraw-info">
                   <div className="info-row">
                     <span>원금:</span>
-                    <span>{depositedAmount} KRW</span>
+                    <span>{isConnected ? depositedAmount : '0'} KRW</span>
                   </div>
                   <div className="info-row">
                     <span>이자:</span>
-                    <span className="interest-amount">+{interest} KRW</span>
+                    <span className="interest-amount">+{isConnected ? interest : '0'} KRW</span>
                   </div>
                   <div className="info-row total">
                     <span>출금 가능 금액:</span>
-                    <span>{totalAmount} KRW</span>
+                    <span>{isConnected ? totalAmount : '0'} KRW</span>
                   </div>
                 </div>
 
                 <motion.button
                   className="action-btn withdraw-btn"
-                  onClick={handleWithdraw}
-                  disabled={isLoading || parseFloat(depositedAmount) === 0}
+                  onClick={isConnected ? handleWithdraw : onConnect}
+                  disabled={isLoading || (!isConnected ? false : parseFloat(depositedAmount) === 0)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {isLoading ? '처리중...' : '전액 출금'}
+                  {isLoading ? '처리중...' : isConnected ? '전액 출금' : '지갑 연결 후 출금'}
                 </motion.button>
               </div>
             )}
           </div>
         </div>
-      )}
     </div>
   );
 };
