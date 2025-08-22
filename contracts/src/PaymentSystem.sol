@@ -8,16 +8,16 @@ import {StableCoin} from "./StableCoinERC20/Token.sol";
 contract PaymentSystem is Ownable {
     StableCoin public token;
 
-    event Receipt(address indexed user, uint256 amount, uint256 timestamp);
+    event Receipt(address indexed user, uint256 amount, string[] products, uint256 timestamp);
 
     constructor(address _token, address _owner) Ownable(_owner) {
         token = StableCoin(_token);
     }
 
-    function pay(uint256 amount) external {
+    function pay(uint256 amount, string[] memory products) external {
         require(token.balanceOf(msg.sender) >= amount, "Insufficient Balance");
         require(token.transferFrom(msg.sender, address(this), amount), "TransferFrom failed");
-        emit Receipt(msg.sender, amount, block.timestamp);
+        emit Receipt(msg.sender, amount, products, block.timestamp);
     }
 
     function withdraw(address to, uint256 amount) external onlyOwner {
