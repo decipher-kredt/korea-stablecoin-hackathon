@@ -18,7 +18,7 @@ contract Deploy is Script {
 
         VaultManager vaultManager = new VaultManager(address(KREDT), msg.sender);
         KREDT.approve(address(vaultManager), type(uint256).max);
-        KREDT.mint(address(vaultManager), 100_000_000 ether);
+        KREDT.mint(address(vaultManager.vault()), 100_000_000 ether);
         KREDT.transferOwnership(address(vaultManager));
 
         console.log("Vault: ", address(vaultManager.vault()));
