@@ -7,7 +7,7 @@ import {StableCoin} from "./StableCoinERC20/Token.sol";
 
 contract ECommerce is Ownable {
     StableCoin public token;
-    uint256 public constant FEE_RATE = 100; // 10.0%
+    uint256 public constant FEE_RATE = 50; // 5.0%
     string[] sellerName;
 
     struct SellerInfo {
