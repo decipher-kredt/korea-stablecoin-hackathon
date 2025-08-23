@@ -186,24 +186,6 @@ export const useVaultManager = () => {
     }
   };
 
-  const withdraw = async (): Promise<{ success: boolean; txHash?: string }> => {
-    if (!web3State.contract) return { success: false };
-
-    try {
-      if (!web3State.account) return { success: false };
-      const tx = await web3State.contract.withdraw(web3State.account);
-      const receipt = await tx.wait();
-
-      if (web3State.account) {
-        await updateBalances(web3State.account, web3State.contract);
-      }
-
-      return { success: true, txHash: receipt.hash };
-    } catch (error) {
-      console.error('출금 오류:', error);
-      return { success: false };
-    }
-  };
 
   // 자동으로 지갑 연결 상태 확인 (balance 업데이트 없음 - 수동으로만 호출)
   useEffect(() => {
@@ -286,7 +268,6 @@ export const useVaultManager = () => {
       ...web3State,
       connectWallet,
       deposit,
-      withdraw,
       updateBalances,
       // Bank demo helpers
       mintAndDepositStableCoin: async (amount: string, recipient: string): Promise<{ success: boolean; txHash?: string }> => {

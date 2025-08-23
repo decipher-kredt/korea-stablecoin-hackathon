@@ -83,7 +83,7 @@ const HomePage = () => {
         <Link to="/deposit" className="demo-card">
           <Wallet className="demo-icon" size={48} />
           <h3>예금 시스템</h3>
-          <p>스테이블코인 예금 및 출금</p>
+          <p>스테이블코인 예금</p>
         </Link>
         
         <Link to="/receipt" className="demo-card">
@@ -112,7 +112,6 @@ const DepositPage = () => {
     isConnected,
     connectWallet,
     deposit,
-    withdraw,
     mintAndDepositStableCoin,
     transferWithInterest,
     totalSupply,
@@ -189,7 +188,6 @@ const DepositPage = () => {
             isConnected={isConnected}
             onConnect={connectWallet}
             onDeposit={deposit}
-            onWithdraw={withdraw}
             onSwitchToBank={() => setActiveView('bank')}
           />
         ) : (

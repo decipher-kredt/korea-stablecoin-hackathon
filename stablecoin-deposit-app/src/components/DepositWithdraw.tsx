@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet, ArrowDownCircle, ArrowUpCircle, TrendingUp } from 'lucide-react';
+import { Wallet, ArrowDownCircle, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useToast } from '../contexts/ToastContext';
 
@@ -10,7 +10,6 @@ interface DepositWithdrawProps {
   isConnected: boolean;
   onConnect: () => void;
   onDeposit: (amount: string) => Promise<{ success: boolean; txHash?: string }>;
-  onWithdraw: () => Promise<{ success: boolean; txHash?: string }>;
   onSwitchToBank: () => void;
 }
 
@@ -21,12 +20,10 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
   isConnected,
   onConnect,
   onDeposit,
-  onWithdraw,
   onSwitchToBank,
 }) => {
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
   const [depositCompleted, setDepositCompleted] = useState(false);
   const { showToast } = useToast();
 
@@ -43,13 +40,6 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
     }, 1000);
   };
 
-  const handleWithdraw = async () => {
-    if (!isConnected) {
-      onConnect();
-      return;
-    }
-    showToast('출금 처리 완료', 'success');
-  };
 
   const totalAmount = (parseFloat(depositedAmount) + parseFloat(interest)).toFixed(4);
 
@@ -92,23 +82,14 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
 
           <div className="action-tabs">
             <button
-              className={`tab ${activeTab === 'deposit' ? 'active' : ''}`}
-              onClick={() => setActiveTab('deposit')}
+              className="tab active"
             >
               <ArrowDownCircle size={18} />
               입금
             </button>
-            <button
-              className={`tab ${activeTab === 'withdraw' ? 'active' : ''}`}
-              onClick={() => setActiveTab('withdraw')}
-            >
-              <ArrowUpCircle size={18} />
-              출금
-            </button>
           </div>
 
           <div className="action-content">
-            {activeTab === 'deposit' ? (
               <div className="deposit-section">
                 {!depositCompleted ? (
                   <>
@@ -179,34 +160,6 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="withdraw-section">
-                <div className="withdraw-info">
-                  <div className="info-row">
-                    <span>원금:</span>
-                    <span>{isConnected ? depositedAmount : '0'} KRW</span>
-                  </div>
-                  <div className="info-row">
-                    <span>이자:</span>
-                    <span className="interest-amount">+{isConnected ? interest : '0'} KRW</span>
-                  </div>
-                  <div className="info-row total">
-                    <span>출금 가능 금액:</span>
-                    <span>{isConnected ? totalAmount : '0'} KRW</span>
-                  </div>
-                </div>
-
-                <motion.button
-                  className="action-btn withdraw-btn"
-                  onClick={handleWithdraw}
-                  disabled={isLoading}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isLoading ? '처리중...' : '전액 출금'}
-                </motion.button>
-              </div>
-            )}
           </div>
         </div>
     </div>
