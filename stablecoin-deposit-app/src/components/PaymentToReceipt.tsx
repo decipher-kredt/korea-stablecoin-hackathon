@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { solidityPackedKeccak256, parseEther, getBytes } from 'ethers';
+import { solidityPackedKeccak256, getBytes, parseEther } from 'ethers';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Receipt, Store, Hash, CheckCircle, 
   Loader2, Wallet, CreditCard, FileText,
   DollarSign, Shield, Smartphone
 } from 'lucide-react';
-import { useWeb3 } from '../hooks/useWeb3';
+import { usePaymentSystem } from '../hooks/usePaymentSystem';
+import { useStableCoin } from '../hooks/useStableCoin';
 import { useToast } from '../contexts/ToastContext';
 
 interface PaymentData {
@@ -23,11 +24,17 @@ interface ReceiptData extends PaymentData {
   receiptId?: string;
 }
 
-type FlowStep = 'payment' | 'processing' | 'receipt' | 'complete';
+type FlowStep = 'payment' | 'approve' | 'pay' | 'complete';
 
 const PaymentToReceipt: React.FC = () => {
-  const { account, signer, connectWallet } = useWeb3();
+  const { account, signer, connectWallet: connectPaymentWallet, pay, contract } = usePaymentSystem();
+  const { approve, connectWallet: connectStableCoinWallet, contract: stableCoinContract } = useStableCoin();
   const { showToast } = useToast();
+  
+  const connectWallet = async () => {
+    await connectPaymentWallet();
+    await connectStableCoinWallet();
+  };
   const [currentStep, setCurrentStep] = useState<FlowStep>('payment');
   const [formData, setFormData] = useState<PaymentData>({
     merchantName: '',
@@ -43,17 +50,28 @@ const PaymentToReceipt: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const simulatePayment = async (): Promise<string> => {
-    if (!signer) throw new Error('No signer available');
+  const processPayment = async (): Promise<string> => {
+    if (!pay || !approve) throw new Error('Payment functions not available');
     
-    // Send to 0x000...000 address
-    const tx = await signer.sendTransaction({
-      to: '0x0000000000000000000000000000000000000000',
-      value: parseEther(formData.amount)
-    });
+    const CONTRACT_ADDRESS = '0xae4AAD5AF1Ccbb68655311dA4b9F782898180000'; // PaymentSystem 주소
     
-    await tx.wait();
-    return tx.hash;
+    // Step 1: StableCoin approve to PaymentSystem
+    setCurrentStep('approve');
+    const approveResult = await approve(CONTRACT_ADDRESS, formData.amount);
+    if (!approveResult.success) {
+      throw new Error('StableCoin approve 실패');
+    }
+    
+    // Step 2: PaymentSystem.pay(amount, products) 호출
+    setCurrentStep('pay');
+    const products: string[] = []; // 빈 데이터
+    const result = await pay(formData.amount, products);
+    
+    if (!result.success || !result.txHash) {
+      throw new Error('결제 트랜잭션 실패');
+    }
+    
+    return result.txHash;
   };
 
   const generateReceiptId = () => {
@@ -89,19 +107,13 @@ const PaymentToReceipt: React.FC = () => {
     }
 
     setIsProcessing(true);
-    setCurrentStep('processing');
 
     try {
-      // Step 1: Process Payment
-      const hash = await simulatePayment();
+      // Step 1 & 2: Process Payment (approve + pay)
+      const hash = await processPayment();
       setTxHash(hash);
-      showToast('결제가 처리되었습니다', 'success');
 
-      // Wait for animation
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Step 2: Generate Receipt
-      setCurrentStep('receipt');
+      // Generate Receipt immediately
       const receiptData: ReceiptData = {
         ...formData,
         merchantAddress: account,
@@ -113,9 +125,7 @@ const PaymentToReceipt: React.FC = () => {
       const signature = await signReceipt(receiptData);
       receiptData.signature = signature;
 
-      await new Promise(resolve => setTimeout(resolve, 1500));
       setReceipt(receiptData);
-      
       setCurrentStep('complete');
       showToast('현금영수증이 발행되었습니다', 'success');
     } catch (error) {
@@ -152,7 +162,7 @@ const PaymentToReceipt: React.FC = () => {
     <div className="payment-receipt-container">
       {/* Progress Indicator */}
       <div className="flow-progress">
-        <div className={`progress-step ${currentStep === 'payment' ? 'active' : ['processing', 'receipt', 'complete'].includes(currentStep) ? 'completed' : ''}`}>
+        <div className={`progress-step ${currentStep === 'payment' ? 'active' : ['approve', 'pay', 'complete'].includes(currentStep) ? 'completed' : ''}`}>
           <div className="step-icon">
             <CreditCard size={20} />
           </div>
@@ -162,29 +172,29 @@ const PaymentToReceipt: React.FC = () => {
         <div className="progress-line">
           <div className="progress-fill" style={{
             width: currentStep === 'payment' ? '0%' : 
-                   currentStep === 'processing' ? '33%' : 
-                   currentStep === 'receipt' ? '66%' : '100%'
+                   currentStep === 'approve' ? '33%' : 
+                   currentStep === 'pay' ? '66%' : '100%'
           }} />
         </div>
         
-        <div className={`progress-step ${currentStep === 'processing' ? 'active' : ['receipt', 'complete'].includes(currentStep) ? 'completed' : ''}`}>
+        <div className={`progress-step ${currentStep === 'approve' ? 'active' : ['pay', 'complete'].includes(currentStep) ? 'completed' : ''}`}>
           <div className="step-icon">
-            <Send size={20} />
+            <Shield size={20} />
           </div>
-          <span>처리중</span>
+          <span>Approve</span>
         </div>
         
         <div className="progress-line">
           <div className="progress-fill" style={{
-            width: currentStep === 'receipt' ? '50%' : currentStep === 'complete' ? '100%' : '0%'
+            width: currentStep === 'pay' ? '50%' : currentStep === 'complete' ? '100%' : '0%'
           }} />
         </div>
         
-        <div className={`progress-step ${currentStep === 'receipt' ? 'active' : currentStep === 'complete' ? 'completed' : ''}`}>
+        <div className={`progress-step ${currentStep === 'pay' ? 'active' : currentStep === 'complete' ? 'completed' : ''}`}>
           <div className="step-icon">
-            <FileText size={20} />
+            <Send size={20} />
           </div>
-          <span>영수증</span>
+          <span>Pay</span>
         </div>
         
         <div className="progress-line">
@@ -214,8 +224,8 @@ const PaymentToReceipt: React.FC = () => {
             >
               <div className="section-header">
                 <Wallet className="header-icon" />
-                <h2>스테이블코인 결제</h2>
-                <p>가맹점에 KRW로 결제하세요</p>
+                <h2>현금영수증 발행 시스템</h2>
+                <p>PaymentSystem 컨트랙트를 통한 스테이블코인 결제</p>
               </div>
 
               <form onSubmit={handlePayment} className="payment-form">
@@ -230,7 +240,7 @@ const PaymentToReceipt: React.FC = () => {
                     value={formData.merchantName}
                     onChange={handleInputChange}
                     required
-                    placeholder="예: 카이아 마트"
+                    placeholder="예: 카이아 마트, 커피, 식사 등"
                     className="form-input"
                   />
                 </div>
@@ -295,10 +305,49 @@ const PaymentToReceipt: React.FC = () => {
             </motion.div>
           )}
 
-          {/* Processing Animation */}
-          {currentStep === 'processing' && (
+          {/* Approve Step */}
+          {currentStep === 'approve' && (
             <motion.div
-              key="processing"
+              key="approve"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="processing-section"
+            >
+              <motion.div
+                animate={{ 
+                  rotate: [0, 360],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+                  scale: { duration: 1, repeat: Infinity }
+                }}
+                className="processing-icon"
+              >
+                <Shield size={60} />
+              </motion.div>
+              
+              <h3>결제 승인 요청 중</h3>
+              <p>MetaMask에서 PaymentSystem 컨트랙트에 대한 승인을 확인해주세요</p>
+              
+              <div className="step-info">
+                <div className="info-card">
+                  <span className="info-label">승인 금액:</span>
+                  <span className="info-value">{formData.amount} KRW</span>
+                </div>
+                <div className="info-card">
+                  <span className="info-label">승인 대상:</span>
+                  <span className="info-value">PaymentSystem</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Pay Step */}
+          {currentStep === 'pay' && (
+            <motion.div
+              key="pay"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -318,43 +367,19 @@ const PaymentToReceipt: React.FC = () => {
                 <Send size={60} />
               </motion.div>
               
-              <h3>거래 처리 중...</h3>
-              <p>블록체인에서 거래를 확인하고 있습니다</p>
+              <h3>결제 진행 중</h3>
+              <p>MetaMask에서 결제 트랜잭션을 확인해주세요</p>
               
-              <div className="tx-preview">
-                <Hash size={16} />
-                <span className="tx-hash">{txHash.substring(0, 20)}...</span>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Receipt Generation Animation */}
-          {currentStep === 'receipt' && !receipt && (
-            <motion.div
-              key="receipt-gen"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="receipt-generation"
-            >
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ 
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20,
-                  duration: 0.8
-                }}
-                className="receipt-icon-wrapper"
-              >
-                <div className="receipt-icon-bg">
-                  <Receipt size={60} />
+              <div className="step-info">
+                <div className="info-card">
+                  <span className="info-label">결제 금액:</span>
+                  <span className="info-value">{formData.amount} KRW</span>
                 </div>
-              </motion.div>
-              
-              <h3>현금영수증 생성 중...</h3>
-              <p>전자 서명을 진행하고 있습니다</p>
+                <div className="info-card">
+                  <span className="info-label">가맹점:</span>
+                  <span className="info-value">{formData.merchantName}</span>
+                </div>
+              </div>
             </motion.div>
           )}
 
@@ -383,7 +408,7 @@ const PaymentToReceipt: React.FC = () => {
                   </div>
 
                   <div className="receipt-row">
-                    <span className="label">가맹점</span>
+                    <span className="label">상품/가맹점</span>
                     <span className="value">{receipt.merchantName}</span>
                   </div>
 
@@ -399,7 +424,14 @@ const PaymentToReceipt: React.FC = () => {
 
                   <div className="receipt-row">
                     <span className="label">거래 해시</span>
-                    <span className="value mono small">{receipt.txHash.substring(0, 20)}...</span>
+                    <a 
+                      href={`https://kairos.kaiascan.io/tx/${receipt.txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="value mono small tx-link"
+                    >
+                      {receipt.txHash.substring(0, 20)}...
+                    </a>
                   </div>
 
                   <div className="receipt-row">
@@ -407,9 +439,14 @@ const PaymentToReceipt: React.FC = () => {
                     <span className="value">{new Date(receipt.timestamp).toLocaleString('ko-KR')}</span>
                   </div>
 
+                  <div className="receipt-row">
+                    <span className="label">컨트랙트</span>
+                    <span className="value mono small">PaymentSystem</span>
+                  </div>
+
                   <div className="signature-section">
                     <Shield size={16} />
-                    <span>전자서명 완료</span>
+                    <span>PaymentSystem Receipt 이벤트 완료</span>
                   </div>
                 </div>
 

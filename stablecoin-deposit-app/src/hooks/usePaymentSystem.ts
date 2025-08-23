@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import contractABI from '../contracts/abi.json';
+import PaymentSystemABI from '../abi/PaymentSystemABI.json';
 
-const CONTRACT_ADDRESS = '0x0000000000000000000000000000000000000000'; // Replace with deployed address
+
+
+const CONTRACT_ADDRESS = '0xae4AAD5AF1Ccbb68655311dA4b9F782898180000'; // Replace with deployed address
 
 export interface Web3State {
   account: string | null;
@@ -15,7 +17,7 @@ export interface Web3State {
   isConnected: boolean;
 }
 
-export const useWeb3 = () => {
+export const usePaymentSystem = () => {
   const [web3State, setWeb3State] = useState<Web3State>({
     account: null,
     provider: null,
@@ -71,7 +73,7 @@ export const useWeb3 = () => {
       const accounts = await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
 
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, PaymentSystemABI, signer);
 
       setWeb3State({
         account: accounts[0],
@@ -84,61 +86,59 @@ export const useWeb3 = () => {
         isConnected: true,
       });
 
-      await updateBalances(accounts[0], contract);
+      // PaymentSystem has no deposit info to track here
     } catch (error) {
       console.error('지갑 연결 오류:', error);
     }
   };
 
-  const updateBalances = async (account: string, contract: ethers.Contract) => {
-    try {
-      const depositInfo = await contract.getDepositInfo(account);
-      setWeb3State(prev => ({
-        ...prev,
-        depositedAmount: ethers.formatEther(depositInfo.principal),
-        interest: ethers.formatEther(depositInfo.interest),
-      }));
-    } catch (error) {
-      console.error('잔액 업데이트 오류:', error);
-    }
-  };
+  // No balances to update for this hook
 
-  const deposit = async (amount: string): Promise<{ success: boolean; txHash?: string }> => {
+  const pay = async (amount: string, products: string[]): Promise<{ success: boolean; txHash?: string }> => {
     if (!web3State.contract || !web3State.signer) return { success: false };
-
     try {
       const amountWei = ethers.parseEther(amount);
-      const tx = await web3State.contract.deposit(amountWei);
+      const tx = await web3State.contract.pay(amountWei, products);
       const receipt = await tx.wait();
-
-      if (web3State.account) {
-        await updateBalances(web3State.account, web3State.contract);
-      }
-
       return { success: true, txHash: receipt.hash };
     } catch (error) {
-      console.error('입금 오류:', error);
+      console.error('결제 오류:', error);
       return { success: false };
     }
   };
 
-  const withdraw = async (): Promise<{ success: boolean; txHash?: string }> => {
-    if (!web3State.contract) return { success: false };
+  // No withdraw in PaymentSystem
 
-    try {
-      const tx = await web3State.contract.withdraw();
-      const receipt = await tx.wait();
-
-      if (web3State.account) {
-        await updateBalances(web3State.account, web3State.contract);
+  // 자동으로 지갑 연결 상태 확인 (balance 업데이트 없음)
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (typeof (window as any).ethereum !== 'undefined') {
+        try {
+          const provider = new ethers.BrowserProvider((window as any).ethereum);
+          const accounts = await provider.listAccounts();
+          
+          if (accounts.length > 0 && !web3State.isConnected) {
+            console.log('usePaymentSystem - 자동 연결 감지됨');
+            const signer = await provider.getSigner();
+            const contract = new ethers.Contract(CONTRACT_ADDRESS, PaymentSystemABI, signer);
+            
+            setWeb3State(prev => ({
+              ...prev,
+              account: accounts[0].address,
+              provider,
+              signer,
+              contract,
+              isConnected: true,
+            }));
+          }
+        } catch (error) {
+          console.log('usePaymentSystem - 자동 연결 확인 실패:', error);
+        }
       }
+    };
 
-      return { success: true, txHash: receipt.hash };
-    } catch (error) {
-      console.error('출금 오류:', error);
-      return { success: false };
-    }
-  };
+    checkConnection();
+  }, []);
 
   useEffect(() => {
     if ((window as any).ethereum) {
@@ -156,55 +156,14 @@ export const useWeb3 = () => {
           });
         } else if (web3State.contract) {
           setWeb3State(prev => ({ ...prev, account: accounts[0] }));
-          updateBalances(accounts[0], web3State.contract!);
         }
       });
     }
   }, [web3State.contract]);
 
-  const mintStablecoin = async (amount: string, recipient: string): Promise<{ success: boolean; txHash?: string }> => {
-    if (!web3State.contract || !web3State.signer) return { success: false };
-
-    try {
-      const amountWei = ethers.parseEther(amount);
-      // This would call a mint function on the contract (if bank role)
-      // For demo purposes, we'll simulate this
-      const tx = await web3State.contract.mint(recipient, amountWei);
-      const receipt = await tx.wait();
-
-      return { success: true, txHash: receipt.hash };
-    } catch (error) {
-      console.error('스테이블코인 발행 오류:', error);
-      return { success: false };
-    }
-  };
-
-  const transferWithInterest = async (recipient: string, principal: string, interest: string): Promise<{ success: boolean; txHash?: string }> => {
-    if (!web3State.contract || !web3State.signer) return { success: false };
-
-    try {
-      const principalWei = ethers.parseEther(principal);
-      const interestWei = ethers.parseEther(interest);
-      const totalWei = principalWei + interestWei;
-      
-      // This would call a transfer function on the contract
-      // For demo purposes, we'll simulate this
-      const tx = await web3State.contract.transfer(recipient, totalWei);
-      const receipt = await tx.wait();
-
-      return { success: true, txHash: receipt.hash };
-    } catch (error) {
-      console.error('송금 오류:', error);
-      return { success: false };
-    }
-  };
-
   return {
     ...web3State,
     connectWallet,
-    deposit,
-    withdraw,
-    mintStablecoin,
-    transferWithInterest,
+    pay,
   };
 };

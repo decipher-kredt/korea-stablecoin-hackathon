@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ethers, solidityPackedKeccak256, parseEther, getBytes } from 'ethers';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Receipt, Phone, Hash, Store, CheckCircle, Loader2 } from 'lucide-react';
-import { useWeb3 } from '../hooks/useWeb3';
+import { useVaultManager } from '../hooks/useVaultManager';
 import { useToast } from '../contexts/ToastContext';
 
 interface ReceiptData {
@@ -17,7 +17,7 @@ interface ReceiptData {
 }
 
 const CashReceipt: React.FC = () => {
-  const { account, signer } = useWeb3();
+  const { account, signer } = useVaultManager();
   const { showToast } = useToast();
   const [formData, setFormData] = useState({
     merchantName: '',

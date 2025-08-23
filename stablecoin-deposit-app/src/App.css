@@ -495,10 +495,13 @@ body {
 
 /* Withdraw Info */
 .withdraw-info {
-  background: #fafbfc;
+  background: rgba(255, 255, 255, 0.08);
   padding: 1.75rem;
   margin-bottom: 1.75rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(191, 240, 7, 0.2);
+  border-radius: 1rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .info-row {
@@ -506,8 +509,9 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.875rem 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(191, 240, 7, 0.15);
   transition: all 0.2s ease;
+  color: #EDEDED;
 }
 
 .info-row:hover {
@@ -522,14 +526,14 @@ body {
 .info-row.total {
   font-weight: 800;
   font-size: 1.25rem;
-  color: #0f172a;
+  color: #EDEDED;
   padding-top: 1.25rem;
   margin-top: 0.5rem;
-  border-top: 2px solid #0061ff;
+  border-top: 2px solid rgba(191, 240, 7, 0.5);
 }
 
 .interest-amount {
-  color: #10b981;
+  color: #bff007;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -1212,6 +1216,174 @@ body {
   background: rgba(191, 240, 7, 0.1);
   border-left: 1px solid rgba(191, 240, 7, 0.2);
   user-select: none;
+}
+
+.verify-btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(191, 240, 7, 0.2);
+  color: #bff007;
+  border: 1px solid rgba(191, 240, 7, 0.4);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.verify-btn:hover:not(:disabled) {
+  background: rgba(191, 240, 7, 0.3);
+  border-color: rgba(191, 240, 7, 0.6);
+  transform: translateY(-1px);
+}
+
+.verify-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Deposit Completed Styles */
+.deposit-completed {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.success-icon {
+  margin-bottom: 1.5rem;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+  animation: pulse 2s infinite;
+}
+
+.deposit-completed h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #10B981;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.deposit-completed p {
+  font-size: 1rem;
+  color: rgba(237, 237, 237, 0.8);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.reset-btn {
+  padding: 0.875rem 2rem;
+  background: rgba(191, 240, 7, 0.15);
+  color: #bff007;
+  border: 1px solid rgba(191, 240, 7, 0.4);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 20px rgba(191, 240, 7, 0.2);
+}
+
+.reset-btn:hover {
+  background: rgba(191, 240, 7, 0.25);
+  border-color: rgba(191, 240, 7, 0.6);
+  box-shadow: 0 8px 30px rgba(191, 240, 7, 0.3);
+  transform: translateY(-2px);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(16, 185, 129, 0.5);
+  }
+}
+
+/* Step Info Styles */
+.step-info {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-card {
+  background: rgba(191, 240, 7, 0.1);
+  border: 1px solid rgba(191, 240, 7, 0.3);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.info-label {
+  font-size: 0.9rem;
+  color: rgba(237, 237, 237, 0.7);
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: #bff007;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(191, 240, 7, 0.3);
+}
+
+/* Transaction Hash Link Styles */
+.tx-link {
+  color: #bff007 !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.tx-link:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 15px rgba(191, 240, 7, 0.5);
+  border-bottom: 1px solid rgba(191, 240, 7, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Connection Status Styles */
+.wallet-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.connected-wallet {
+  color: rgba(237, 237, 237, 0.8);
+  font-size: 0.9rem;
+}
+
+.connection-status {
+  color: #10B981;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .address-input {

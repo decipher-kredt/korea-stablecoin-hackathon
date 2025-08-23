@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { Building2, Coins, Send, UserCheck, ArrowRight, DollarSign } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useToast } from '../contexts/ToastContext';
+import { ethers } from 'ethers';
 
 interface BankDemoProps {
   onMintStablecoin: (amount: string, recipient: string) => Promise<{ success: boolean; txHash?: string }>;
   onTransferWithInterest: (recipient: string, principal: string, interest: string) => Promise<{ success: boolean; txHash?: string }>;
+  totalSupply?: string;
+  vaultBalance?: string;
+  isLoadingStableCoin?: boolean;
 }
 
-const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInterest }) => {
+const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInterest, totalSupply = '0', vaultBalance = '0', isLoadingStableCoin = false }) => {
   const [activeOperation, setActiveOperation] = useState<'mint' | 'transfer'>('mint');
   const [mintAmount, setMintAmount] = useState('');
   const [recipientAddress, setRecipientAddress] = useState('');
@@ -49,6 +53,43 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
       setRecipientAddress('');
     } else {
       showToast('스테이블코인 발행에 실패했습니다', 'error');
+    }
+    setIsLoading(false);
+  };
+
+  const handleVerifyDepositor = async () => {
+    if (!recipientAddress) {
+      showToast('입금자 주소를 입력해주세요', 'error');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Vault 컨트랙트에서 depositors 매핑 조회
+      const provider = new ethers.JsonRpcProvider('https://public-en-kairos.node.kaia.io');
+      const vaultContract = new ethers.Contract('0xC44C01b57D09A0FD37b9071076230Aa5F8ed411A', [
+        {
+          "inputs": [{"name": "", "type": "address"}],
+          "name": "depositors",
+          "outputs": [{"name": "", "type": "uint256"}],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ], provider);
+      
+      const depositAmount = await vaultContract.depositors(recipientAddress);
+      const depositAmountFormatted = ethers.formatEther(depositAmount);
+      
+      if (parseFloat(depositAmountFormatted) > 0) {
+        setPrincipalAmount(depositAmountFormatted);
+        showToast(`입금자 확인 완료: ${parseFloat(depositAmountFormatted).toLocaleString()} KRW`, 'success');
+      } else {
+        showToast('해당 주소에 입금 내역이 없습니다', 'error');
+        setPrincipalAmount('');
+      }
+    } catch (error) {
+      console.error('입금자 확인 오류:', error);
+      showToast('입금자 확인에 실패했습니다', 'error');
     }
     setIsLoading(false);
   };
@@ -97,6 +138,44 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
           <p>은행이 스테이블코인을 발행하고 관리하는 프로세스</p>
         </div>
       </div>
+
+      {activeOperation === 'mint' ? (
+        <div className="balance-display">
+          <div className="balance-card">
+            <span className="balance-label">전체 발행량</span>
+            <span className="balance-amount">
+              {isLoadingStableCoin ? (
+                <div className="loading-spinner" style={{ display: 'inline-block', width: '20px', height: '20px' }}></div>
+              ) : (
+                `${parseFloat(totalSupply).toLocaleString()} KREDT`
+              )}
+            </span>
+          </div>
+          <div className="balance-card">
+            <span className="balance-label">총 예치 금액</span>
+            <span className="balance-amount">
+              {isLoadingStableCoin ? (
+                <div className="loading-spinner" style={{ display: 'inline-block', width: '20px', height: '20px' }}></div>
+              ) : (
+                `${parseFloat(vaultBalance).toLocaleString()} KREDT`
+              )}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div className="balance-display">
+          <div className="balance-card">
+            <span className="balance-label">총 예치 금액</span>
+            <span className="balance-amount">
+              {isLoadingStableCoin ? (
+                <div className="loading-spinner" style={{ display: 'inline-block', width: '20px', height: '20px' }}></div>
+              ) : (
+                `${parseFloat(vaultBalance).toLocaleString()} KREDT`
+              )}
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="operation-tabs">
         <button
@@ -175,33 +254,55 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
           <div className="transfer-section">
             <div className="operation-description">
               <div className="step-indicator">
-                <div className="step active">
+                <div className={`step ${!principalAmount ? 'active' : ''}`}>
                   <UserCheck size={16} />
-                  <span>만기 확인</span>
+                  <span>입금자 확인</span>
                 </div>
                 <ArrowRight className="step-arrow" size={16} />
-                <div className="step">
+                <div className={`step ${principalAmount ? 'active' : ''}`}>
                   <Send size={16} />
                   <span>원금+이자 송금</span>
                 </div>
               </div>
               <p className="description-text">
-                예금 만기 시 은행은 원금과 이자를 합산하여 고객 지갑으로 송금합니다
+                입금자의 지갑 주소를 입력하고 확인하여 원금을 자동으로 가져온 후, 원금과 이자를 합산하여 송금합니다
               </p>
             </div>
 
             <div className="form-field">
-              <label className="field-label">원금</label>
+              <label className="field-label">입금자 지갑 주소</label>
               <div className="input-wrapper">
                 <input
-                  type="number"
-                  placeholder="예: 10000000"
+                  type="text"
+                  placeholder="0x..."
+                  value={recipientAddress}
+                  onChange={(e) => setRecipientAddress(e.target.value)}
+                  className="field-input address-type"
+                />
+                <button
+                  className="verify-btn"
+                  onClick={handleVerifyDepositor}
+                  disabled={!recipientAddress || isLoading}
+                >
+                  확인
+                </button>
+              </div>
+              <span className="field-hint">입금자의 지갑 주소를 입력하고 확인 버튼을 눌러주세요</span>
+            </div>
+
+            <div className="form-field">
+              <label className="field-label">원금</label>
+              <div className="input-wrapper readonly">
+                <input
+                  type="text"
                   value={principalAmount}
-                  onChange={(e) => setPrincipalAmount(e.target.value)}
                   className="field-input"
+                  readOnly
+                  disabled
                 />
                 <span className="input-suffix">KRW</span>
               </div>
+              <span className="field-hint">입금자 확인 시 자동으로 입력됩니다</span>
             </div>
 
             <div className="form-field">
@@ -211,7 +312,6 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
                   type="text"
                   value={interestAmount}
                   className="field-input"
-                  readOnly
                   disabled
                 />
                 <span className="input-suffix">KRW</span>
@@ -227,18 +327,6 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
                 </span>
               </div>
             )}
-
-            <div className="form-field">
-              <label className="field-label">고객 지갑 주소</label>
-              <input
-                type="text"
-                placeholder="0x..."
-                value={recipientAddress}
-                onChange={(e) => setRecipientAddress(e.target.value)}
-                className="field-input address-type"
-              />
-              <span className="field-hint">원금과 이자를 받을 고객의 지갑 주소</span>
-            </div>
 
             <motion.button
               className="action-btn transfer-btn"
