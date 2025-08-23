@@ -72,11 +72,11 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
           </div>
           <div className="balance-card highlight">
             <span className="balance-label">발생 이자</span>
-            <span className="balance-amount">{isConnected ? interest : '0'} KRW</span>
+            <span className="balance-amount">{isConnected ? interest : '0'} KREDT</span>
           </div>
           <div className="balance-card total">
             <span className="balance-label">총 금액</span>
-            <span className="balance-amount">{isConnected ? totalAmount : '0'} KRW</span>
+            <span className="balance-amount">{isConnected ? totalAmount : '0'} KREDT</span>
           </div>
         </div>
 
@@ -116,7 +116,7 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      {isLoading ? '처리중...' : '스테이블코인 입금'}
+                      {isLoading ? '처리중...' : '예금 입금'}
                     </motion.button>
                   </>
                 ) : (

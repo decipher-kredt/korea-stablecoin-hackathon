@@ -41,7 +41,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
         ? `https://kairos.kaiascan.io/tx/${result.txHash}`
         : undefined;
       
-      showToast(`${mintAmount} KRW 스테이블코인 발행 완료`, {
+      showToast(`${mintAmount} KREDT 스테이블코인 발행 완료`, {
         type: 'success',
         action: explorerUrl ? {
           label: '확인',
@@ -82,7 +82,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
       
       if (parseFloat(depositAmountFormatted) > 0) {
         setPrincipalAmount(depositAmountFormatted);
-        showToast(`입금자 확인 완료: ${parseFloat(depositAmountFormatted).toLocaleString()} KRW`, 'success');
+        showToast(`입금자 확인 완료: ${parseFloat(depositAmountFormatted).toLocaleString()} KREDT`, 'success');
       } else {
         showToast('해당 주소에 입금 내역이 없습니다', 'error');
         setPrincipalAmount('');
@@ -113,7 +113,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
         ? `https://kairos.kaiascan.io/tx/${result.txHash}`
         : undefined;
       
-      showToast(`${total} KRW 송금 완료 (원금: ${principalAmount}, 이자: ${interestAmount})`, {
+      showToast(`${total} KREDT 송금 완료 (원금: ${principalAmount}, 이자: ${interestAmount})`, {
         type: 'success',
         action: explorerUrl ? {
           label: '확인',
@@ -224,7 +224,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
                   onChange={(e) => setMintAmount(e.target.value)}
                   className="field-input"
                 />
-                <span className="input-suffix">KRW</span>
+                <span className="input-suffix">KREDT</span>
               </div>
             </div>
 
@@ -300,7 +300,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
                   readOnly
                   disabled
                 />
-                <span className="input-suffix">KRW</span>
+                <span className="input-suffix">KREDT</span>
               </div>
               <span className="field-hint">입금자 확인 시 자동으로 입력됩니다</span>
             </div>
@@ -314,7 +314,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
                   className="field-input"
                   disabled
                 />
-                <span className="input-suffix">KRW</span>
+                <span className="input-suffix">KREDT</span>
               </div>
               <span className="field-hint">원금의 3%가 자동으로 계산됩니다</span>
             </div>
@@ -323,7 +323,7 @@ const BankDemo: React.FC<BankDemoProps> = ({ onMintStablecoin, onTransferWithInt
               <div className="total-preview">
                 <span>총 송금액:</span>
                 <span className="total-amount">
-                  {(parseFloat(principalAmount || '0') + parseFloat(interestAmount || '0')).toLocaleString()} KRW
+                  {(parseFloat(principalAmount || '0') + parseFloat(interestAmount || '0')).toLocaleString()} KREDT
                 </span>
               </div>
             )}

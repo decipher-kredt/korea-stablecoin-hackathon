@@ -248,7 +248,7 @@ const PaymentToReceipt: React.FC = () => {
                 <div className="form-group">
                   <label>
                     <DollarSign size={18} />
-                    결제 금액 (KRW)
+                    결제 금액 (KREDT)
                   </label>
                   <input
                     type="number"
@@ -334,7 +334,7 @@ const PaymentToReceipt: React.FC = () => {
               <div className="step-info">
                 <div className="info-card">
                   <span className="info-label">승인 금액:</span>
-                  <span className="info-value">{formData.amount} KRW</span>
+                  <span className="info-value">{formData.amount} KREDT</span>
                 </div>
                 <div className="info-card">
                   <span className="info-label">승인 대상:</span>
@@ -373,7 +373,7 @@ const PaymentToReceipt: React.FC = () => {
               <div className="step-info">
                 <div className="info-card">
                   <span className="info-label">결제 금액:</span>
-                  <span className="info-value">{formData.amount} KRW</span>
+                  <span className="info-value">{formData.amount} KREDT</span>
                 </div>
                 <div className="info-card">
                   <span className="info-label">가맹점:</span>
@@ -414,7 +414,7 @@ const PaymentToReceipt: React.FC = () => {
 
                   <div className="receipt-row highlight">
                     <span className="label">결제 금액</span>
-                    <span className="value amount">{receipt.amount} KRW</span>
+                    <span className="value amount">{receipt.amount} KREDT</span>
                   </div>
 
                   <div className="receipt-row">
