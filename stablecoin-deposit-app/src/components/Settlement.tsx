@@ -628,7 +628,6 @@ const Settlement = () => {
                     <>
                       <div className="wallet-info-section">
                         <span className="connected-wallet">연결된 지갑: {account}</span>
-                        <span className="connection-status">✅ ECommerce & StableCoin 연결됨</span>
                       </div>
                       <button 
                         onClick={handleSettlement}

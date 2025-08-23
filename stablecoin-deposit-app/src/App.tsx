@@ -77,7 +77,8 @@ const HomePage = () => {
         )}
       </div>
       <div className="home-page">
-        <h1>대한민국 스테이블코인 해커톤 데모</h1>
+        <h1>Team Decipher</h1>
+        <h2>대한민국 스테이블코인 해커톤 데모</h2>
       
       <div className="demo-cards">
         <Link to="/deposit" className="demo-card">
@@ -89,13 +90,13 @@ const HomePage = () => {
         <Link to="/receipt" className="demo-card">
           <Receipt className="demo-icon" size={48} />
           <h3>현금영수증</h3>
-          <p>암호화폐 결제 영수증 발행</p>
+          <p>스테이블코인 결제 영수증 발행</p>
         </Link>
         
         <Link to="/settlement" className="demo-card">
           <Calculator className="demo-icon" size={48} />
           <h3>이커머스 셀러 정산</h3>
-          <p>이커머스 셀러 3곳 스테이블코인 정산</p>
+          <p>스테이블코인을 이용한 이커머스 정산</p>
         </Link>
       </div>
       </div>
