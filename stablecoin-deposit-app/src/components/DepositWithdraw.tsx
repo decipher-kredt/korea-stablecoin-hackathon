@@ -11,6 +11,7 @@ interface DepositWithdrawProps {
   onConnect: () => void;
   onDeposit: (amount: string) => Promise<{ success: boolean; txHash?: string }>;
   onWithdraw: () => Promise<{ success: boolean; txHash?: string }>;
+  onSwitchToBank: () => void;
 }
 
 const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
@@ -21,58 +22,33 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
   onConnect,
   onDeposit,
   onWithdraw,
+  onSwitchToBank,
 }) => {
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
+  const [depositCompleted, setDepositCompleted] = useState(false);
   const { showToast } = useToast();
 
   const handleDeposit = async () => {
-    if (!amount || parseFloat(amount) <= 0) {
-      showToast('유효한 금액을 입력해주세요', 'error');
+    if (!isConnected) {
+      onConnect();
       return;
     }
-
     setIsLoading(true);
-    const result = await onDeposit(amount);
-    if (result.success) {
-      setAmount('');
-      const explorerUrl = result.txHash 
-        ? `https://kairos.kaiascan.io/tx/${result.txHash}`
-        : undefined;
-      
-      showToast('입금 완료', {
-        type: 'success',
-        action: explorerUrl ? {
-          label: '확인',
-          href: explorerUrl
-        } : undefined
-      });
-    } else {
-      showToast('입금에 실패했습니다. 다시 시도해주세요.', 'error');
-    }
-    setIsLoading(false);
+    // 시뮬레이션을 위한 지연
+    setTimeout(() => {
+      setDepositCompleted(true);
+      setIsLoading(false);
+    }, 1000);
   };
 
   const handleWithdraw = async () => {
-    setIsLoading(true);
-    const result = await onWithdraw();
-    if (result.success) {
-      const explorerUrl = result.txHash 
-        ? `https://kairos.kaiascan.io/tx/${result.txHash}`
-        : undefined;
-      
-      showToast('출금 완료', {
-        type: 'success',
-        action: explorerUrl ? {
-          label: '확인',
-          href: explorerUrl
-        } : undefined
-      });
-    } else {
-      showToast('출금에 실패했습니다. 다시 시도해주세요.', 'error');
+    if (!isConnected) {
+      onConnect();
+      return;
     }
-    setIsLoading(false);
+    showToast('출금 처리 완료', 'success');
   };
 
   const totalAmount = (parseFloat(depositedAmount) + parseFloat(interest)).toFixed(4);
@@ -134,31 +110,74 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
           <div className="action-content">
             {activeTab === 'deposit' ? (
               <div className="deposit-section">
-                <div className="input-group">
-                  <input
-                    type="number"
-                    placeholder="입금할 금액을 입력하세요"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="amount-input"
-                  />
-                  <span className="currency-label">KRW</span>
-                </div>
-                
-                <div className="info-box">
-                  <TrendingUp size={16} />
-                  <span>연 이자율: 3.0%</span>
-                </div>
+                {!depositCompleted ? (
+                  <>
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        placeholder="입금할 금액을 입력하세요"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        className="amount-input"
+                      />
+                      <span className="currency-label">KRW</span>
+                    </div>
+                    
+                    <div className="info-box">
+                      <TrendingUp size={16} />
+                      <span>연 이자율: 3.0%</span>
+                    </div>
 
-                <motion.button
-                  className="action-btn deposit-btn"
-                  onClick={isConnected ? handleDeposit : onConnect}
-                  disabled={isLoading || (!isConnected ? false : !amount)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isLoading ? '처리중...' : isConnected ? '스테이블코인 입금' : '지갑 연결 후 입금'}
-                </motion.button>
+                    <motion.button
+                      className="action-btn deposit-btn"
+                      onClick={handleDeposit}
+                      disabled={isLoading || !amount}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {isLoading ? '처리중...' : '스테이블코인 입금'}
+                    </motion.button>
+                  </>
+                ) : (
+                  <div className="deposit-completed">
+                    <motion.div
+                      className="success-icon"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    >
+                      <div className="checkmark">✓</div>
+                    </motion.div>
+                    <motion.h3
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      입금 완료
+                    </motion.h3>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      {amount} KRW가 성공적으로 입금되었습니다
+                    </motion.p>
+                    <motion.button
+                      className="reset-btn"
+                      onClick={() => {
+                        setDepositCompleted(false);
+                        setAmount('');
+                      }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.7 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      다시 입금하기
+                    </motion.button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="withdraw-section">
@@ -179,12 +198,12 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
 
                 <motion.button
                   className="action-btn withdraw-btn"
-                  onClick={isConnected ? handleWithdraw : onConnect}
-                  disabled={isLoading || (!isConnected ? false : parseFloat(depositedAmount) === 0)}
+                  onClick={handleWithdraw}
+                  disabled={isLoading}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {isLoading ? '처리중...' : isConnected ? '전액 출금' : '지갑 연결 후 출금'}
+                  {isLoading ? '처리중...' : '전액 출금'}
                 </motion.button>
               </div>
             )}

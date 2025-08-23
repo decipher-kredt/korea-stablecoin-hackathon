@@ -1,17 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ethers } from 'ethers';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import DepositWithdraw from './components/DepositWithdraw';
-import BankDemo from './components/BankDemo';
 import PaymentToReceipt from './components/PaymentToReceipt';
+import BankDemo from './components/BankDemo';
 import Settlement from './components/Settlement';
 import './components/PaymentToReceipt.css';
-import { useWeb3 } from './hooks/useWeb3';
+import { useVaultManager } from './hooks/useVaultManager';
+import { useStableCoin } from './hooks/useStableCoin';
+import { usePaymentSystem } from './hooks/usePaymentSystem';
+import { useECommerce } from './hooks/useECommerce';
 import { ToastProvider } from './contexts/ToastContext';
 import { Wallet, Receipt, Home, User, Building2, Calculator } from 'lucide-react';
 
 const HomePage = () => {
-  const { account, isConnected, connectWallet } = useWeb3();
+  // 홈화면에서는 단순히 MetaMask 연결 상태만 확인
+  const [isConnected, setIsConnected] = useState(false);
+  const [account, setAccount] = useState<string | null>(null);
+
+  const checkWalletConnection = async () => {
+    if (typeof (window as any).ethereum !== 'undefined') {
+      try {
+        const provider = new ethers.BrowserProvider((window as any).ethereum);
+        const accounts = await provider.listAccounts();
+        
+        if (accounts.length > 0) {
+          setIsConnected(true);
+          setAccount(accounts[0].address);
+        } else {
+          setIsConnected(false);
+          setAccount(null);
+        }
+      } catch (error) {
+        console.log('홈화면 - 지갑 연결 확인 실패:', error);
+        setIsConnected(false);
+        setAccount(null);
+      }
+    }
+  };
+
+  const handleConnectWallet = async () => {
+    if (typeof (window as any).ethereum !== 'undefined') {
+      try {
+        const provider = new ethers.BrowserProvider((window as any).ethereum);
+        const accounts = await provider.send('eth_requestAccounts', []);
+        
+        if (accounts.length > 0) {
+          setIsConnected(true);
+          setAccount(accounts[0]);
+        }
+      } catch (error) {
+        console.log('홈화면 - 지갑 연결 실패:', error);
+      }
+    }
+  };
+
+  // 페이지 로드 시 지갑 연결 상태 확인
+  useEffect(() => {
+    checkWalletConnection();
+  }, []);
 
   return (
     <>
@@ -22,7 +70,7 @@ const HomePage = () => {
             {account?.substring(0, 6)}...{account?.substring(account.length - 4)}
           </div>
         ) : (
-          <button className="connect-wallet-btn" onClick={connectWallet}>
+          <button className="connect-wallet-btn" onClick={handleConnectWallet}>
             <Wallet size={16} />
             지갑 연결
           </button>
@@ -65,9 +113,27 @@ const DepositPage = () => {
     connectWallet,
     deposit,
     withdraw,
-    mintStablecoin,
+    mintAndDepositStableCoin,
     transferWithInterest,
-  } = useWeb3();
+    totalSupply,
+    vaultBalance,
+    refreshStableCoinInfo,
+    isLoadingStableCoin,
+    updateBalances,
+    contract,
+  } = useVaultManager();
+
+  const handleConnectWallet = async () => {
+    await connectWallet();
+    // 지갑 연결 후 수동으로 balance 업데이트
+    if (account && contract) {
+      try {
+        await updateBalances(account, contract);
+      } catch (error) {
+        console.log('예금 서비스 - balance 업데이트 실패:', error);
+      }
+    }
+  };
 
   return (
     <>
@@ -78,7 +144,7 @@ const DepositPage = () => {
             {account?.substring(0, 6)}...{account?.substring(account.length - 4)}
           </div>
         ) : (
-          <button className="connect-wallet-btn" onClick={connectWallet}>
+          <button className="connect-wallet-btn" onClick={handleConnectWallet}>
             <Wallet size={16} />
             지갑 연결
           </button>
@@ -103,7 +169,11 @@ const DepositPage = () => {
             </button>
             <button
               className={`view-tab ${activeView === 'bank' ? 'active' : ''}`}
-              onClick={() => setActiveView('bank')}
+              onClick={() => {
+                setActiveView('bank');
+                // 은행 탭으로 이동할 때 스테이블코인 정보 업데이트 (지갑 연결 없이도 가능)
+                refreshStableCoinInfo();
+              }}
             >
               <Building2 size={16} />
               은행 운영
@@ -120,11 +190,15 @@ const DepositPage = () => {
             onConnect={connectWallet}
             onDeposit={deposit}
             onWithdraw={withdraw}
+            onSwitchToBank={() => setActiveView('bank')}
           />
         ) : (
-          <BankDemo
-            onMintStablecoin={mintStablecoin}
+          <BankDemo 
+            onMintStablecoin={mintAndDepositStableCoin} 
             onTransferWithInterest={transferWithInterest}
+            totalSupply={totalSupply}
+            vaultBalance={vaultBalance}
+            isLoadingStableCoin={isLoadingStableCoin}
           />
         )}
       </main>
@@ -134,7 +208,16 @@ const DepositPage = () => {
 };
 
 const ReceiptPage = () => {
-  const { account, isConnected, connectWallet } = useWeb3();
+  const { account: stableCoinAccount, isConnected: isStableCoinConnected, connectWallet: connectStableCoin } = useStableCoin();
+  const { account: paymentAccount, isConnected: isPaymentConnected, connectWallet: connectPayment } = usePaymentSystem();
+
+  const handleConnectWallet = async () => {
+    await connectStableCoin();
+    await connectPayment();
+  };
+
+  const isConnected = isStableCoinConnected && isPaymentConnected;
+  const account = stableCoinAccount || paymentAccount;
 
   return (
     <>
@@ -145,7 +228,7 @@ const ReceiptPage = () => {
             {account?.substring(0, 6)}...{account?.substring(account.length - 4)}
           </div>
         ) : (
-          <button className="connect-wallet-btn" onClick={connectWallet}>
+          <button className="connect-wallet-btn" onClick={handleConnectWallet}>
             <Wallet size={16} />
             지갑 연결
           </button>
@@ -169,7 +252,16 @@ const ReceiptPage = () => {
 };
 
 const SettlementPage = () => {
-  const { account, isConnected, connectWallet } = useWeb3();
+  const { account: ecommerceAccount, isConnected: isEcommerceConnected, connectWallet: connectEcommerce } = useECommerce();
+  const { account: stableCoinAccount, isConnected: isStableCoinConnected, connectWallet: connectStableCoin } = useStableCoin();
+
+  const handleConnectWallet = async () => {
+    await connectEcommerce();
+    await connectStableCoin();
+  };
+
+  const isConnected = isEcommerceConnected && isStableCoinConnected;
+  const account = ecommerceAccount || stableCoinAccount;
 
   return (
     <>
@@ -180,7 +272,7 @@ const SettlementPage = () => {
             {account?.substring(0, 6)}...{account?.substring(account.length - 4)}
           </div>
         ) : (
-          <button className="connect-wallet-btn" onClick={connectWallet}>
+          <button className="connect-wallet-btn" onClick={handleConnectWallet}>
             <Wallet size={16} />
             지갑 연결
           </button>
