@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { solidityPackedKeccak256, getBytes, parseEther } from 'ethers';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Send, Receipt, Store, Hash, CheckCircle, 
-  Loader2, Wallet, CreditCard, FileText,
+  Send, Receipt, Store, CheckCircle, 
+  Loader2, Wallet, CreditCard,
   DollarSign, Shield, Smartphone
 } from 'lucide-react';
 import { usePaymentSystem } from '../hooks/usePaymentSystem';
@@ -27,8 +27,8 @@ interface ReceiptData extends PaymentData {
 type FlowStep = 'payment' | 'approve' | 'pay' | 'complete';
 
 const PaymentToReceipt: React.FC = () => {
-  const { account, signer, connectWallet: connectPaymentWallet, pay, contract } = usePaymentSystem();
-  const { approve, connectWallet: connectStableCoinWallet, contract: stableCoinContract } = useStableCoin();
+  const { account, signer, connectWallet: connectPaymentWallet, pay } = usePaymentSystem();
+  const { approve, connectWallet: connectStableCoinWallet } = useStableCoin();
   const { showToast } = useToast();
   
   const connectWallet = async () => {
@@ -41,7 +41,6 @@ const PaymentToReceipt: React.FC = () => {
     amount: '',
     phoneNumber: '',
   });
-  const [txHash, setTxHash] = useState<string>('');
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -111,7 +110,6 @@ const PaymentToReceipt: React.FC = () => {
     try {
       // Step 1 & 2: Process Payment (approve + pay)
       const hash = await processPayment();
-      setTxHash(hash);
 
       // Generate Receipt immediately
       const receiptData: ReceiptData = {
@@ -140,7 +138,6 @@ const PaymentToReceipt: React.FC = () => {
   const resetFlow = () => {
     setCurrentStep('payment');
     setFormData({ merchantName: '', amount: '', phoneNumber: '' });
-    setTxHash('');
     setReceipt(null);
   };
 

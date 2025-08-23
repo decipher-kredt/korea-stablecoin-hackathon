@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Store, Truck, CreditCard, ArrowRight, Check, Wallet, User, ShoppingCart, Building2, Smartphone, Plus, Minus } from 'lucide-react';
+import { Store, Truck, CreditCard, ArrowRight, Check, Wallet, User, ShoppingCart, Building2, Plus, Minus } from 'lucide-react';
 import { useECommerce } from '../hooks/useECommerce';
 import { useStableCoin } from '../hooks/useStableCoin';
 import { useToast } from '../contexts/ToastContext';
@@ -24,8 +24,8 @@ const Settlement = () => {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [currentStep, setCurrentStep] = useState<'idle' | 'payment_demo' | 'fee_transfer' | 'settlements' | 'completed'>('idle');
   const [settleProgress, setSettleProgress] = useState(0);
-  const [showPaymentDemo, setShowPaymentDemo] = useState(false);
-  const [paymentStep, setPaymentStep] = useState<'user_pays' | 'funds_received' | 'ready_to_settle'>('user_pays');
+  const [showPaymentDemo, ] = useState(false);
+  const [paymentStep, ] = useState<'user_pays' | 'funds_received' | 'ready_to_settle'>('user_pays');
   const [shoppingCart, setShoppingCart] = useState([
     { id: 1, name: 'Nike Air Max 270', price: 189000, quantity: 0, seller: 'Nike' },
     { id: 2, name: 'Adidas Ultraboost 22', price: 249000, quantity: 0, seller: 'Adidas' },
@@ -118,7 +118,7 @@ const Settlement = () => {
     }
   };
   
-  const [localSellers, setLocalSellers] = useState<Seller[]>([
+  useState<Seller[]>([
     {
       id: 'seller1',
       name: 'Nike',
@@ -160,13 +160,7 @@ const Settlement = () => {
     }
   ]);
 
-  const COUPANG_FEE_WALLET = '0x1234567890abcdef1234567890abcdef12345678';
-
   const cartTotal = shoppingCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  
-  const totalAmount = localSellers.reduce((sum, seller) => sum + seller.settlementAmount, 0);
-  const totalFeeAmount = localSellers.reduce((sum, seller) => sum + seller.feeAmount, 0);
-  const totalGrossAmount = localSellers.reduce((sum, seller) => sum + seller.grossAmount, 0);
 
   const updateQuantity = (id: number, change: number) => {
     setShoppingCart(prev => prev.map(item => 
@@ -247,27 +241,6 @@ const Settlement = () => {
     }
   };
 
-  const startPaymentDemo = async () => {
-    console.log('결제 데모 시작');
-    setShowPaymentDemo(true);
-    setCurrentStep('payment_demo');
-    setPaymentStep('user_pays');
-    
-    setTimeout(() => {
-      setPaymentStep('funds_received');
-      showToast('고객들이 상품 대금을 결제했습니다!', 'success');
-    }, 2000);
-    
-    setTimeout(() => {
-      setPaymentStep('ready_to_settle');
-      showToast('이커머스 플랫폼에서 정산을 준비하고 있습니다...', 'info');
-    }, 4000);
-    
-    setTimeout(() => {
-      setShowPaymentDemo(false);
-      setCurrentStep('idle');
-    }, 6000);
-  };
 
   const handleSettlement = async () => {
     if (!isConnected) {

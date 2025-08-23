@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import ECommerceABI from '../abi/ECommerceABI.json';
 
@@ -106,7 +106,7 @@ export const useECommerce = () => {
     }
   };
 
-  const fetchSellers = async () => {
+  const fetchSellers = useCallback(async () => {
     console.log('fetchSellers 호출됨');
     console.log('web3State.contract:', !!web3State.contract);
     
@@ -162,7 +162,7 @@ export const useECommerce = () => {
       console.error('Sellers 정보 가져오기 실패:', error);
       setWeb3State(prev => ({ ...prev, isLoadingSellers: false }));
     }
-  };
+  }, [web3State.contract]);
 
   // 자동으로 지갑 연결 상태 확인 (balance 업데이트 없음)
   useEffect(() => {
@@ -193,7 +193,7 @@ export const useECommerce = () => {
     };
 
     checkConnection();
-  }, []);
+  }, [web3State.isConnected]);
 
   useEffect(() => {
     if ((window as any).ethereum) {
@@ -222,7 +222,7 @@ export const useECommerce = () => {
     if (web3State.contract) {
       fetchSellers();
     }
-  }, [web3State.contract]);
+  }, [web3State.contract, fetchSellers]);
 
   return {
     ...web3State,

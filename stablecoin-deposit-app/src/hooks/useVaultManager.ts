@@ -219,7 +219,7 @@ export const useVaultManager = () => {
     };
 
     checkConnection();
-  }, []);
+  }, [web3State.isConnected]);
 
   useEffect(() => {
     if ((window as any).ethereum) {

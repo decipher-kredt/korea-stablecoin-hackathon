@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Wallet, ArrowDownCircle, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useToast } from '../contexts/ToastContext';
 
 interface DepositWithdrawProps {
   account: string | null;
@@ -25,7 +24,6 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [depositCompleted, setDepositCompleted] = useState(false);
-  const { showToast } = useToast();
 
   const handleDeposit = async () => {
     if (!isConnected) {
