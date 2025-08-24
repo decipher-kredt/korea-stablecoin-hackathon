@@ -43,7 +43,7 @@
 
 ## 🏗️ 아키텍처
 
-### Frontend (`stablecoin-deposit-app/`)
+### Frontend (`web/`)
 
 - **프레임워크**: React 19 + TypeScript
 - **스타일링**: Tailwind CSS + Framer Motion
@@ -95,7 +95,7 @@
 3. **Frontend 애플리케이션 실행**
 
    ```bash
-   cd stablecoin-deposit-app
+   cd web
    npm install
    npm start
    ```
