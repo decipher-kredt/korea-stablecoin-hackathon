@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, Receipt, Store, CheckCircle, 
   Loader2, Wallet, CreditCard,
-  DollarSign, Shield, Smartphone
+  HandCoins, Shield, Smartphone
 } from 'lucide-react';
 import { usePaymentSystem } from '../hooks/usePaymentSystem';
 import { useStableCoin } from '../hooks/useStableCoin';
@@ -244,7 +244,7 @@ const PaymentToReceipt: React.FC = () => {
 
                 <div className="form-group">
                   <label>
-                    <DollarSign size={18} />
+                    <HandCoins size={18} />
                     결제 금액 (KREDT)
                   </label>
                   <input
