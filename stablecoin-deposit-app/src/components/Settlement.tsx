@@ -349,7 +349,11 @@ const Settlement = () => {
         <div className="settlement-main">
           {/* Shopping Tab */}
           {activeTab === 'shopping' && (
-            <div className="shopping-demo-section">
+            <div className="iphone-container">
+              <div className="iphone-frame">
+                <div className="iphone-notch"></div>
+                <div className="iphone-screen">
+                  <div className="shopping-demo-section">
               <div className="shopping-header">
                 <div className="platform-info">
                   <Store className="platform-icon" size={32} />
@@ -414,6 +418,9 @@ const Settlement = () => {
                         </>
                       )}
                     </button>
+                </div>
+              </div>
+                  </div>
                 </div>
               </div>
             </div>
