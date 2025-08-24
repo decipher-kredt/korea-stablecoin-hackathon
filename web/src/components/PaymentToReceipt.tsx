@@ -125,7 +125,7 @@ const PaymentToReceipt: React.FC = () => {
 
       setReceipt(receiptData);
       setCurrentStep('complete');
-      showToast('현금영수증이 발행되었습니다', 'success');
+      showToast('스테이블코인 영수증이 발행되었습니다', 'success');
     } catch (error) {
       console.error('Process failed:', error);
       showToast('처리 중 오류가 발생했습니다', 'error');
@@ -221,7 +221,7 @@ const PaymentToReceipt: React.FC = () => {
             >
               <div className="section-header">
                 <Wallet className="header-icon" />
-                <h2>현금영수증 발행 시스템</h2>
+                <h2>스테이블코인 영수증 발행 시스템</h2>
                 <p>PaymentSystem 스마트 컨트랙트를 통한 스테이블코인 결제</p>
               </div>
 
@@ -393,7 +393,7 @@ const PaymentToReceipt: React.FC = () => {
                 <div className="receipt-header">
                   <div className="receipt-title">
                     <Receipt size={24} />
-                    <h3>전자 현금영수증</h3>
+                    <h3>전자 스테이블코인 영수증</h3>
                   </div>
                   <CheckCircle className="success-icon" size={28} />
                 </div>

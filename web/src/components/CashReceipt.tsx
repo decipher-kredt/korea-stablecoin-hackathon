@@ -86,7 +86,7 @@ const CashReceipt: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       setReceipt(receiptData);
-      showToast('현금영수증이 발행되었습니다', 'success');
+      showToast('스테이블코인 영수증이 발행되었습니다', 'success');
       
       setTimeout(() => {
         setShowAnimation(false);
@@ -124,7 +124,7 @@ const CashReceipt: React.FC = () => {
         >
           <div className="flex items-center gap-3 mb-6">
             <Receipt className="w-6 h-6 text-purple-400" />
-            <h2 className="text-xl font-semibold">현금영수증 발행</h2>
+            <h2 className="text-xl font-semibold">스테이블코인 영수증 발행</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -248,7 +248,7 @@ const CashReceipt: React.FC = () => {
               className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border border-gray-700"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold">전자 현금영수증</h3>
+                <h3 className="text-xl font-semibold">전자 스테이블코인 영수증</h3>
                 <CheckCircle className="w-6 h-6 text-green-400" />
               </div>
 

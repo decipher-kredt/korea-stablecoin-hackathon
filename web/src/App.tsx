@@ -89,7 +89,7 @@ const HomePage = () => {
         
         <Link to="/receipt" className="demo-card">
           <Receipt className="demo-icon" size={48} />
-          <h3>현금영수증</h3>
+          <h3>스테이블코인 영수증</h3>
           <p>스테이블코인 결제 영수증 발행</p>
         </Link>
         
@@ -239,7 +239,7 @@ const ReceiptPage = () => {
             <Home size={20} />
             홈으로
           </Link>
-          <h1>현금영수증 발행 시스템</h1>
+          <h1>스테이블코인 영수증 발행 시스템</h1>
           <p>스테이블코인 결제 소득공제 영수증</p>
         </header>
       <main className="main-content">
