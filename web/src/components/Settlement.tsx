@@ -148,11 +148,9 @@ const Settlement = () => {
       setSellerBalances(balances);
     };
     
-    // Fetch balances when contract is available or when active tab changes
-    if (activeTab === 'settlement') {
-      fetchKREDTBalances();
-    }
-  }, [stableCoinContract, activeTab, contractSellers]); // Also refresh when contractSellers changes
+    // Fetch balances on initial load and when contract becomes available
+    fetchKREDTBalances();
+  }, [stableCoinContract, contractSellers]); // Also refresh when contractSellers changes
 
   useState<Seller[]>([
     {
