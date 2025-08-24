@@ -368,7 +368,7 @@ const Settlement = () => {
                         <Store className="item-icon" size={20} />
                         <div className="item-details">
                           <span className="item-name">{item.name}</span>
-                          <span className="item-seller">판매자: {item.seller}</span>
+                          <span className="item-seller">셀러: {item.seller}</span>
                           <span className="item-price">₩{item.price.toLocaleString()}</span>
                         </div>
                       </div>
