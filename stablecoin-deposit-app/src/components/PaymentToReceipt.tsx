@@ -222,7 +222,7 @@ const PaymentToReceipt: React.FC = () => {
               <div className="section-header">
                 <Wallet className="header-icon" />
                 <h2>현금영수증 발행 시스템</h2>
-                <p>PaymentSystem 컨트랙트를 통한 스테이블코인 결제</p>
+                <p>PaymentSystem 스마트 컨트랙트를 통한 스테이블코인 결제</p>
               </div>
 
               <form onSubmit={handlePayment} className="payment-form">
@@ -326,7 +326,7 @@ const PaymentToReceipt: React.FC = () => {
               </motion.div>
               
               <h3>결제 승인 요청 중</h3>
-              <p>MetaMask에서 PaymentSystem 컨트랙트에 대한 승인을 확인해주세요</p>
+              <p>MetaMask에서 PaymentSystem 스마트 컨트랙트에 대한 승인을 확인해주세요</p>
               
               <div className="step-info">
                 <div className="info-card">
