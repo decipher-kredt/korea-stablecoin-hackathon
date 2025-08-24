@@ -679,27 +679,6 @@ const Settlement = () => {
                     </>
                   )}
                 </div>
-
-                <div className="process-section">
-                  <h3 className="process-title">정산 프로세스</h3>
-                  <div className="process-grid">
-                    <div className="process-step">
-                      <div className="step-number step-1">1</div>
-                      <div className="step-title">결제 집계</div>
-                      <div className="step-desc">각 셀러별 판매금액을 집계합니다</div>
-                    </div>
-                    <div className="process-step">
-                      <div className="step-number step-2">2</div>
-                      <div className="step-title">스테이블코인 전송</div>
-                      <div className="step-desc">각 셀러 지갑으로 정산금을 전송합니다</div>
-                    </div>
-                    <div className="process-step">
-                      <div className="step-number step-3">3</div>
-                      <div className="step-title">정산 완료</div>
-                      <div className="step-desc">정산 내역을 국세청에 자동 통보합니다</div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </>
           )}
