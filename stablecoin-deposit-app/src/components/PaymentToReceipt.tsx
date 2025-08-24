@@ -163,7 +163,7 @@ const PaymentToReceipt: React.FC = () => {
           <div className="step-icon">
             <CreditCard size={20} />
           </div>
-          <span>결제</span>
+          <span>구매</span>
         </div>
         
         <div className="progress-line">
@@ -178,7 +178,7 @@ const PaymentToReceipt: React.FC = () => {
           <div className="step-icon">
             <Shield size={20} />
           </div>
-          <span>Approve</span>
+          <span>결제 승인</span>
         </div>
         
         <div className="progress-line">
@@ -191,7 +191,7 @@ const PaymentToReceipt: React.FC = () => {
           <div className="step-icon">
             <Send size={20} />
           </div>
-          <span>Pay</span>
+          <span>결제</span>
         </div>
         
         <div className="progress-line">
