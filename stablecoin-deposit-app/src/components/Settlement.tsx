@@ -523,7 +523,7 @@ const Settlement = () => {
                   {['Nike', 'Adidas', 'Puma'].map((sellerName, index) => {
                     const seller = contractSellers.find(s => s.name === sellerName);
                     const balance = seller ? parseFloat(seller.balance) : 0;
-                    const feeAmount = balance * 0.1; // 10% 수수료
+                    const feeAmount = balance * 0.05; // 5% 수수료
                     const settlementAmount = balance - feeAmount;
                     
                     return (
@@ -544,7 +544,7 @@ const Settlement = () => {
                             <span className="settlement-amount">{balance.toFixed(3)} KREDT</span>
                           </div>
                           <div className="detail-row">
-                            <span className="detail-label">플랫폼 수수료 (10%)</span>
+                            <span className="detail-label">플랫폼 수수료 (5%)</span>
                             <span className="settlement-amount">{feeAmount.toFixed(3)} KREDT</span>
                           </div>
                           <div className="detail-row">
@@ -576,7 +576,7 @@ const Settlement = () => {
                     <span className="total-amount">{contractSellers.reduce((sum, seller) => sum + parseFloat(seller.balance), 0).toFixed(3)} KREDT</span>
                   </div>
                   <div className="total-row">
-                    <span className="total-label">플랫폼 수수료 (10%)</span>
+                    <span className="total-label">플랫폼 수수료 (5%)</span>
                     <span className="total-amount">{contractSellers.reduce((sum, seller) => sum + (parseFloat(seller.balance) * 0.1), 0).toFixed(3)} KREDT</span>
                   </div>
                   <div className="total-row">
