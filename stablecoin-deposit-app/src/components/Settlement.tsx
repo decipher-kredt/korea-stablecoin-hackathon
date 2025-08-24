@@ -27,9 +27,10 @@ const Settlement = () => {
   const [showPaymentDemo, ] = useState(false);
   const [paymentStep, ] = useState<'user_pays' | 'funds_received' | 'ready_to_settle'>('user_pays');
   const [shoppingCart, setShoppingCart] = useState([
-    { id: 1, name: 'Nike Air Max 270', price: 189000, quantity: 0, seller: 'Nike' },
-    { id: 2, name: 'Adidas Ultraboost 22', price: 249000, quantity: 0, seller: 'Adidas' },
-    { id: 3, name: 'Puma RS-X', price: 159000, quantity: 0, seller: 'Puma' }
+    { id: 1, name: 'Hoka Clifton 9', price: 219000, quantity: 0, seller: 'Hoka' },
+    { id: 2, name: 'Nike Air Max 270', price: 189000, quantity: 0, seller: 'Nike' },
+    { id: 3, name: 'Adidas Ultraboost 22', price: 249000, quantity: 0, seller: 'Adidas' },
+    { id: 4, name: 'Puma RS-X', price: 159000, quantity: 0, seller: 'Puma' }
   ]);
   const { showToast } = useToast();
   const { account, isConnected: ecommerceConnected, connectWallet: connectEcommerce, pay, settle, sellers: contractSellers, fetchSellers, contract: ecommerceContract } = useECommerce();
@@ -520,7 +521,7 @@ const Settlement = () => {
                 <h2 className="status-title">정산 현황</h2>
                 
                 <div className="sellers-grid">
-                  {['Nike', 'Adidas', 'Puma'].map((sellerName, index) => {
+                  {['Hoka', 'Nike', 'Adidas', 'Puma'].map((sellerName, index) => {
                     const seller = contractSellers.find(s => s.name === sellerName);
                     const balance = seller ? parseFloat(seller.balance) : 0;
                     const feeAmount = balance * 0.05; // 5% 수수료
@@ -554,9 +555,10 @@ const Settlement = () => {
                           <div className="detail-row">
                             <span className="detail-label">지갑 주소</span>
                             <span className="wallet-address">
-                              {sellerName === 'Nike' ? '0x2AC0fa1C8CF6f988999B51Ac66d22ff1E0ce7D2a' :
+                              {sellerName === 'Hoka' ? '0x72A3aFdCa071C78eAc8e0557DfD560aeF80c5FB6' :
+                               sellerName === 'Nike' ? '0x2AC0fa1C8CF6f988999B51Ac66d22ff1E0ce7D2a' :
                                sellerName === 'Adidas' ? '0x1d24ef3E80a08A6192aaCd3AE29afC07b0C90024' :
-                               sellerName === 'Puma' ? '0x1d24ef3E80a08A6192aaCd3AE29afC07b0C90024' :
+                               sellerName === 'Puma' ? '0x5D0Aaf78624C12785e7fF5CDaFBAE4689271b562' :
                                seller?.address || '등록되지 않음'}
                             </span>
                           </div>

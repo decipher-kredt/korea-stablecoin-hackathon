@@ -30,6 +30,7 @@ contract Deploy is Script {
         ECommerce ecommerce = new ECommerce(address(KREDT), msg.sender);
         console.log("ECommerce: ", address(ecommerce));
 
+        ecommerce.addSeller("Hoka", address(0x72A3aFdCa071C78eAc8e0557DfD560aeF80c5FB6));
         ecommerce.addSeller("Nike", address(0x2AC0fa1C8CF6f988999B51Ac66d22ff1E0ce7D2a));
         ecommerce.addSeller("Adidas", address(0x1d24ef3E80a08A6192aaCd3AE29afC07b0C90024));
         ecommerce.addSeller("Puma", address(0x5D0Aaf78624C12785e7fF5CDaFBAE4689271b562));

@@ -119,7 +119,7 @@ export const useECommerce = () => {
       console.log('Sellers 정보 가져오기 시작');
       setWeb3State(prev => ({ ...prev, isLoadingSellers: true }));
       
-      const sellerNames = ['Nike', 'Adidas', 'Puma'];
+      const sellerNames = ['Hoka', 'Nike', 'Adidas', 'Puma'];
       const sellersData: SellerInfo[] = [];
       
       for (const name of sellerNames) {
