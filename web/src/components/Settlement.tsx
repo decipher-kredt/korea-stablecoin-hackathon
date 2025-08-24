@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Store, Truck, CreditCard, ArrowRight, Check, Wallet, User, ShoppingCart, Building2, Plus, Minus } from 'lucide-react';
 import { useECommerce } from '../hooks/useECommerce';
 import { useStableCoin } from '../hooks/useStableCoin';
 import { useToast } from '../contexts/ToastContext';
+import { ethers } from 'ethers';
 
 interface Seller {
   id: string;
@@ -32,6 +33,7 @@ const Settlement = () => {
     { id: 3, name: 'Adidas Ultraboost 22', price: 249000, quantity: 0, seller: 'Adidas' },
     { id: 4, name: 'Puma RS-X', price: 159000, quantity: 0, seller: 'Puma' }
   ]);
+  const [sellerBalances, setSellerBalances] = useState<{[key: string]: string}>({});
   const { showToast } = useToast();
   const { account, isConnected: ecommerceConnected, connectWallet: connectEcommerce, pay, settle, sellers: contractSellers, fetchSellers, contract: ecommerceContract } = useECommerce();
   const { approve, isConnected: stableCoinConnected, connectWallet: connectStableCoin, contract: stableCoinContract } = useStableCoin();
@@ -119,6 +121,39 @@ const Settlement = () => {
     }
   };
   
+  // Fetch KREDT balances for each seller
+  useEffect(() => {
+    const fetchKREDTBalances = async () => {
+      if (!stableCoinContract) return;
+      
+      const sellerAddresses = {
+        'Hoka': '0x72A3aFdCa071C78eAc8e0557DfD560aeF80c5FB6',
+        'Nike': '0x2AC0fa1C8CF6f988999B51Ac66d22ff1E0ce7D2a',
+        'Adidas': '0x1d24ef3E80a08A6192aaCd3AE29afC07b0C90024',
+        'Puma': '0x5D0Aaf78624C12785e7fF5CDaFBAE4689271b562'
+      };
+      
+      const balances: {[key: string]: string} = {};
+      
+      for (const [name, address] of Object.entries(sellerAddresses)) {
+        try {
+          const balance = await stableCoinContract.balanceOf(address);
+          balances[name] = ethers.formatEther(balance);
+        } catch (error) {
+          console.error(`Error fetching balance for ${name}:`, error);
+          balances[name] = '0';
+        }
+      }
+      
+      setSellerBalances(balances);
+    };
+    
+    // Fetch balances when contract is available or when active tab changes
+    if (activeTab === 'settlement') {
+      fetchKREDTBalances();
+    }
+  }, [stableCoinContract, activeTab, contractSellers]); // Also refresh when contractSellers changes
+
   useState<Seller[]>([
     {
       id: 'seller1',
@@ -538,8 +573,8 @@ const Settlement = () => {
                       const balance = seller ? parseFloat(seller.balance) : 0;
                       const feeAmount = balance * 0.05; // 5% 수수료
                       const settlementAmount = balance - feeAmount;
-                      // Mock current balance (you can replace with actual wallet balance)
-                      const currentBalance = balance > 0 ? (Math.random() * 1000).toFixed(3) : '0.000';
+                      // Get actual KREDT balance from blockchain
+                      const currentBalance = sellerBalances[sellerName] || '0.000';
                     
                     return (
                       <div key={sellerName} className="seller-card">
