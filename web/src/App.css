@@ -1606,7 +1606,7 @@ body {
   .sellers-grid {
     gap: 1.5rem;
   }
-  
+
   .sellers-grid-horizontal {
     gap: 1rem;
   }
@@ -2042,13 +2042,13 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  margin: 0 0 1rem 0;
-  background: rgba(191, 240, 7, 0.1);
-  border: 1px solid rgba(191, 240, 7, 0.3);
-  border-radius: 1rem;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  padding: 1.25rem;
+  margin: 0 0 1.25rem 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .platform-icon {
@@ -2073,13 +2073,13 @@ body {
 }
 
 .shopping-cart {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
-  padding: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 1.25rem;
   margin: 0;
-  border: 1px solid rgba(191, 240, 7, 0.2);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .shopping-cart h4 {
@@ -2567,5 +2567,162 @@ body {
     50% {
       transform: rotate(90deg) translateY(8px);
     }
+  }
+}
+
+/* iPhone Container for Shopping Tab */
+.iphone-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.iphone-frame {
+  position: relative;
+  width: 400px;
+  height: 750px;
+  background: linear-gradient(145deg, #4a4a4f 0%, #2c2c2e 50%, #1a1a1c 100%);
+  border-radius: 54px;
+  padding: 9px;
+  box-shadow:
+    inset 0 0 2px 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+.iphone-frame::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 30px;
+  background: #000;
+  border-radius: 100px;
+  z-index: 10;
+}
+
+.iphone-notch {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 162px;
+  height: 37px;
+  background: #000;
+  border-radius: 26px;
+  z-index: 21;
+  box-shadow: 0 0 0 4px #000;
+}
+
+.iphone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 45px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.iphone-screen::-webkit-scrollbar {
+  width: 3px;
+}
+
+.iphone-screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.iphone-screen::-webkit-scrollbar-thumb {
+  background: rgba(191, 240, 7, 0.3);
+  border-radius: 2px;
+}
+
+.shopping-demo-section {
+  background: transparent;
+  padding: 1.25rem 1rem;
+  padding-top: 2.5rem;
+  min-height: 100%;
+}
+
+/* Add titanium frame effect */
+.iphone-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 54px;
+  background: linear-gradient(45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 70%);
+  pointer-events: none;
+}
+
+/* Action button */
+.iphone-action-button {
+  position: absolute;
+  top: 200px;
+  left: -2px;
+  width: 3px;
+  height: 80px;
+  background: linear-gradient(145deg, #4a4a4f 0%, #2c2c2e 50%, #1a1a1c 100%);
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Volume buttons */
+.iphone-volume-up {
+  position: absolute;
+  top: 250px;
+  right: -2px;
+  width: 3px;
+  height: 60px;
+  background: linear-gradient(145deg, #4a4a4f 0%, #2c2c2e 50%, #1a1a1c 100%);
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.iphone-volume-down {
+  position: absolute;
+  top: 320px;
+  right: -2px;
+  width: 3px;
+  height: 60px;
+  background: linear-gradient(145deg, #4a4a4f 0%, #2c2c2e 50%, #1a1a1c 100%);
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Power button */
+.iphone-power {
+  position: absolute;
+  top: 300px;
+  right: -2px;
+  width: 3px;
+  height: 90px;
+  background: linear-gradient(145deg, #4a4a4f 0%, #2c2c2e 50%, #1a1a1c 100%);
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .iphone-container {
+    padding: 0.5rem;
+  }
+
+  .iphone-frame {
+    width: calc(100vw - 2rem);
+    max-width: 393px;
+    height: calc(100vh - 100px);
+    max-height: 852px;
   }
 }

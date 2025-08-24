@@ -352,6 +352,10 @@ const Settlement = () => {
             <div className="iphone-container">
               <div className="iphone-frame">
                 <div className="iphone-notch"></div>
+                <div className="iphone-action-button"></div>
+                <div className="iphone-volume-up"></div>
+                <div className="iphone-volume-down"></div>
+                <div className="iphone-power"></div>
                 <div className="iphone-screen">
                   <div className="shopping-demo-section">
               <div className="shopping-header">
