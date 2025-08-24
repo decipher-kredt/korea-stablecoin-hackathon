@@ -527,12 +527,15 @@ const Settlement = () => {
               <div className="settlement-status">
                 <h2 className="status-title">정산 현황</h2>
                 
-                <div className="sellers-grid">
-                  {['Hoka', 'Nike', 'Adidas', 'Puma'].map((sellerName, index) => {
-                    const seller = contractSellers.find(s => s.name === sellerName);
-                    const balance = seller ? parseFloat(seller.balance) : 0;
-                    const feeAmount = balance * 0.05; // 5% 수수료
-                    const settlementAmount = balance - feeAmount;
+                <div className="sellers-scroll-container">
+                  <div className="sellers-grid-horizontal">
+                    {['Hoka', 'Nike', 'Adidas', 'Puma'].map((sellerName, index) => {
+                      const seller = contractSellers.find(s => s.name === sellerName);
+                      const balance = seller ? parseFloat(seller.balance) : 0;
+                      const feeAmount = balance * 0.05; // 5% 수수료
+                      const settlementAmount = balance - feeAmount;
+                      // Mock current balance (you can replace with actual wallet balance)
+                      const currentBalance = balance > 0 ? (Math.random() * 1000).toFixed(3) : '0.000';
                     
                     return (
                       <div key={sellerName} className="seller-card">
@@ -547,6 +550,10 @@ const Settlement = () => {
                         </div>
                         
                         <div className="seller-details">
+                          <div className="detail-row">
+                            <span className="detail-label">현재 잔액</span>
+                            <span className="settlement-amount current-balance">{currentBalance} KREDT</span>
+                          </div>
                           <div className="detail-row">
                             <span className="detail-label">총 매출액</span>
                             <span className="settlement-amount">{balance.toFixed(3)} KREDT</span>
@@ -575,8 +582,9 @@ const Settlement = () => {
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="total-summary">

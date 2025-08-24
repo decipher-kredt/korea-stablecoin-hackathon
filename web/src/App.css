@@ -1555,6 +1555,45 @@ body {
   color: #EDEDED;
 }
 
+/* Horizontal scrolling container */
+.sellers-scroll-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 3rem;
+  padding: 0 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(191, 240, 7, 0.3) transparent;
+}
+
+.sellers-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.sellers-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.sellers-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(191, 240, 7, 0.3);
+  border-radius: 4px;
+}
+
+.sellers-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(191, 240, 7, 0.5);
+}
+
+.sellers-grid-horizontal {
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  min-width: max-content;
+}
+
+/* Old vertical grid for backwards compatibility */
 .sellers-grid {
   display: flex;
   flex-direction: column;
@@ -1567,6 +1606,10 @@ body {
   .sellers-grid {
     gap: 1.5rem;
   }
+  
+  .sellers-grid-horizontal {
+    gap: 1rem;
+  }
 }
 
 .seller-card {
@@ -1578,7 +1621,8 @@ body {
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   transition: all 0.3s ease;
-  min-width: 0;
+  min-width: 320px;
+  flex-shrink: 0;
   word-wrap: break-word;
 }
 
@@ -1649,6 +1693,13 @@ body {
   font-size: 1.125rem;
   color: #bff007;
   text-shadow: 0 0 10px rgba(191, 240, 7, 0.3);
+}
+
+.settlement-amount.current-balance {
+  color: #f59e0b;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
 }
 
 .wallet-address {
