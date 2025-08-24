@@ -147,7 +147,7 @@ const CashReceipt: React.FC = () => {
             <div>
               <label className="flex items-center gap-2 text-sm text-gray-400 mb-2">
                 <Receipt className="w-4 h-4" />
-                결제 금액 (USDT)
+                결제 금액 (KREDT)
               </label>
               <input
                 type="number"
@@ -266,7 +266,7 @@ const CashReceipt: React.FC = () => {
                 <div className="flex justify-between py-2 border-b border-gray-700">
                   <span className="text-gray-400">결제 금액</span>
                   <span className="text-lg font-semibold text-green-400">
-                    {receipt.amount} USDT
+                    {receipt.amount} KREDT
                   </span>
                 </div>
 
