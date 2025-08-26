@@ -1,6 +1,8 @@
 # 대한민국 스테이블코인 해커톤 - Team Decipher
 
-**🇰🇷 대한민국 스테이블코인 해커톤 참여작**
+**2025 제 1회 대한민국 스테이블코인 해커톤 참여작**
+
+<img width="1920" height="1080" alt="kredt" src="https://github.com/user-attachments/assets/83174d2b-54fc-4503-b9c1-8e005b56d7a8" />
 
 ## 📋 프로젝트 개요
 
