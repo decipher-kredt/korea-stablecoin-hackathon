@@ -66,7 +66,7 @@
 
 ### 라이브 데모
 
-🌐 **배포된 데모**: [https://kaia-hackathon-demo.netlify.app](https://kaia-hackathon-demo.netlify.app)
+🌐 **배포된 데모**: [https://korea-stablecoin.netlify.app](https://korea-stablecoin.netlify.app)
 
 ### 로컬 실행 방법
 
